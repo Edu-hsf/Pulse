@@ -1,7 +1,7 @@
 import pool from "../../config/database";
 import { UsersRepository } from "../../repositories";
 
-export async function DeleteUser(id: number) {
+export async function Delete(id: number) {
   if (id <= 0) {
     throw new Error("Nenhum campo informado.");
   }
@@ -12,5 +12,5 @@ export async function DeleteUser(id: number) {
     throw new Error("Usuário não encontrado.");
   }
 
-  await UsersRepository.DeleteUser(id);
+  await UsersRepository.Delete(id);
 }

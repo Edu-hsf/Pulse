@@ -5,7 +5,7 @@ export const Delete = async (req: Request, res: Response) => {
   const { id }  = req.params;
 
   try {
-    await UsersService.DeleteUser(Number(id));
+    await UsersService.Delete(Number(id));
 
     res.status(200).json({ message: "Usuário deletado com sucesso!" });
   } catch (error) {
