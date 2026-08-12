@@ -12,4 +12,4 @@ messagesRouter.delete('/:id', MessagesController.Delete)
 messagesRouter.get('/:id', MessagesController.GetByID)
 messagesRouter.get('/conversation/:conversationId', MessagesController.GetAllByConversationID)
 
-export default messagesRouter;
+export { messagesRouter }; 

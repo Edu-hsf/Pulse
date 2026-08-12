@@ -12,4 +12,4 @@ conversationsRouter.delete('/:id', ConversationsController.Delete)
 conversationsRouter.get('/:id', ConversationsController.GetByID)
 conversationsRouter.get('/user/:userId', ConversationsController.GetAllByUserID)
 
-export default conversationsRouter;
+export { conversationsRouter };

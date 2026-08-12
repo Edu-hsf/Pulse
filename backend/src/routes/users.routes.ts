@@ -11,4 +11,4 @@ usersRouter.delete('/:id', UsersController.Delete)
 
 usersRouter.get('/:id', UsersController.GetByID)
 
-export default usersRouter;
+export { usersRouter };
