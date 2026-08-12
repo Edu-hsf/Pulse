@@ -1,5 +1,4 @@
 import { type Request, type Response } from "express";
-import pool from "../../config/database";
 import { UsersService } from "../../services";
 import { CreateUserDTO } from "../../types/user";
 

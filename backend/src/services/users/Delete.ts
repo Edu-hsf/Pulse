@@ -1,9 +1,8 @@
-import pool from "../../config/database";
 import { UsersRepository } from "../../repositories";
 
 export async function Delete(id: number) {
   if (id <= 0) {
-    throw new Error("Nenhum campo informado.");
+    throw new Error("ID inválido.");
   }
 
   const user = await UsersRepository.GetByID(id);
