@@ -22,7 +22,7 @@ export async function GetAllByUserID(userAdminId: number) {
   const user = await UsersRepository.GetByID(userAdminId);
 
   if (!user || user.deletedAt) {
-    throw new Error('O usuário informado não existe ou está desativado');
+    throw new Error('O usuário informado não existe ou está desativado.');
   }
 
   const conversations = await ConversationsRepository.GetAllByUserID(userAdminId);
