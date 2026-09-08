@@ -1,6 +1,6 @@
 import { UsersRepository } from "../../repositories";
 import { CreateUserDTO } from "../../types/user";
-import { createHash } from 'node:crypto';
+import { argon2Sync, randomBytes } from 'node:crypto';
 
 export async function Create(data: CreateUserDTO) {
   if (Object.keys(data).length === 0) {
@@ -13,7 +13,14 @@ export async function Create(data: CreateUserDTO) {
     throw new Error("Já existe um usuário ativo com esse email.");
   }
 
-  data.passwordHash = createHash('sha256').update(data.passwordHash).digest('hex');
+  data.passwordHash = argon2Sync('argon2id', {
+    message: Buffer.from(data.passwordHash),
+    nonce: randomBytes(16),
+    parallelism: 4,     
+    tagLength: 32,      
+    memory: 65536,  
+    passes: 3,
+  }).toString('hex')
 
   await UsersRepository.Create(data);
 }
