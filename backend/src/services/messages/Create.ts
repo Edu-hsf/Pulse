@@ -2,7 +2,7 @@ import { ConversationsRepository, MessagesRepository, UsersRepository } from "..
 import { CreateMessageDTO } from "../../types/messages";
 
 export async function Create(data: CreateMessageDTO) {
-  if (data.userId <= 0) {
+  if (data.participantId <= 0) {
     throw new Error("ID do usuário inválido.");
   }
 
@@ -10,7 +10,7 @@ export async function Create(data: CreateMessageDTO) {
     throw new Error("ID da conversa inválido.");
   }
 
-  const user = await UsersRepository.GetByID(data.userId);
+  const user = await UsersRepository.GetByID(data.participantId);
 
   if (!user || user.deletedAt) {
     throw new Error("O usuário informado não existe ou está desativado.");

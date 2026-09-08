@@ -1,12 +1,9 @@
 import { type Request, type Response } from "express";
 import { ConversationsService } from "../../services";
-import { CreateConversationDTO } from "../../types/conversations";
 
 export const Create = async (req: Request, res: Response) => {
-  const data = req.body as CreateConversationDTO;
-
   try {
-    await ConversationsService.Create(data);
+    await ConversationsService.Create();
 
     res.status(201).json({ message: "Conversa criada com sucesso!" });
   } catch (error) {

@@ -1,22 +1,23 @@
 import { z } from "zod";
 
 export const messagesSchema = z.object({
-    userId: z.number(),
+    id: z.number(),
+    participantId: z.number(),
     conversationId: z.number(),
-    content: z.string().min(1).max(4000),
+    content: z.string().min(1).max(4000).nullable(),
     createdAt: z.coerce.date(),
-    deletedAt: z.coerce.date(),
+    deletedAt: z.coerce.date().nullable(),
 });
 
 export const createMessagesSchema = z.object({
-  userId: z.number(),
+  participantId: z.number(),
   conversationId: z.number(),
-  content: z.string(),
+  content: z.string().nullable(),
 });
 
 export const updateMessagesSchema = z.object({
-  content: z.string(),
-  deletedAt: z.coerce.date(),
+  content: z.string().nullable(),
+  deletedAt: z.coerce.date().nullable(),
 });
 
 export type Message = z.infer<typeof messagesSchema>;

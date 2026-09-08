@@ -10,7 +10,7 @@ export async function update(id: number, data: UpdateConversationDTO) {
     throw new Error("Nenhum campo informado.");
   }
 
-  if (data.userAdminId <= 0) {
+  if (data.participantAdminId <= 0) {
     throw new Error("ID do administrador inválido.");
   }
 
@@ -20,7 +20,7 @@ export async function update(id: number, data: UpdateConversationDTO) {
     throw new Error("Conversa não encontrada.");
   }
 
-  const user = await UsersRepository.GetByID(data.userAdminId);
+  const user = await UsersRepository.GetByID(data.participantAdminId);
 
   if (!user || user.deletedAt) {
     throw new Error("O usuário informado não existe ou está desativado.");

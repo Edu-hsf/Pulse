@@ -3,7 +3,7 @@ import { UpdateConversationDTO } from "../../types/conversations";
 
 export async function Update(id: number, data: UpdateConversationDTO) {
   return pool.query(
-    `UPDATE CONVERSATIONS SET USER_ADMIN_ID = $1 WHERE ID = $2`,
-    [data.userAdminId, id],
+    `UPDATE CONVERSATIONS SET PARTICIPANT_ADMIN_ID = $1 WHERE ID = $2`,
+    [data.participantAdminId, id],
   );
 }

@@ -1,19 +1,15 @@
 import { z } from "zod";
 
 export const conversationSchema = z.object({
-    userAdminID: z.number(),
-    createdBy: z.number(),
+    id: z.number(),
+    participantAdminID: z.number().nullable(),
     createdAt: z.coerce.date(),
-});
-
-export const createConversationSchema = z.object({
-  userAdminId: z.number(),
+    createdBy: z.number().nullable(),
 });
 
 export const updateConversationSchema = z.object({
-  userAdminId: z.number(),
+  participantAdminId: z.number(),
 });
 
 export type Conversation = z.infer<typeof conversationSchema>;
-export type CreateConversationDTO = z.infer<typeof createConversationSchema>;
 export type UpdateConversationDTO = z.infer<typeof updateConversationSchema>;

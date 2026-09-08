@@ -1,12 +1,13 @@
 import { z } from "zod";
 
 export const userSchema = z.object({
+  id: z.number(),
   name: z.string(),
   email: z.email(),
-  avatar: z.string().optional(),
+  avatar: z.string().nullable(),
   passwordHash: z.string(),
   createdAt: z.coerce.date(),
-  deletedAt: z.coerce.date().optional(),
+  deletedAt: z.coerce.date().nullable(),
 });
 
 export const createUserSchema = z.object({
@@ -16,11 +17,11 @@ export const createUserSchema = z.object({
 });
 
 export const updateUserSchema = z.object({
-  name: z.string().optional(),
-  email: z.email().optional(),
-  avatar: z.string().optional(),
-  passwordHash: z.string().optional(),
-  deletedAt: z.coerce.date().nullable().optional(),
+  name: z.string().nullable(),
+  email: z.email().nullable(),
+  avatar: z.string().nullable(),
+  passwordHash: z.string().nullable(),
+  deletedAt: z.coerce.date().nullable().nullable(),
 });
 
 export type User = z.infer<typeof userSchema>;
