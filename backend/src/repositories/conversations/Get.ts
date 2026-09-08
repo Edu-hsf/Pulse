@@ -1,5 +1,5 @@
 import pool from "../../config/database";
-import { Conversation } from "../../types/conversations";
+import { Conversation } from "../../types/conversation";
 
 export async function GetByID (id: number) {
     const result = await pool.query('SELECT ID, USER_ADMIN_ID, CREATED_AT, CREATED_BY FROM CONVERSATIONS WHERE ID = $1', [id])

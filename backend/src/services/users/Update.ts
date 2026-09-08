@@ -1,6 +1,6 @@
-import { createHash } from "node:crypto";
 import { UsersRepository } from "../../repositories";
 import { UpdateUserDTO } from "../../types/user";
+import argon2 from "argon2";
 
 export async function update(id: number, data: UpdateUserDTO) {
   if (id <= 0) {
@@ -18,7 +18,9 @@ export async function update(id: number, data: UpdateUserDTO) {
   }
 
   if (data.passwordHash !== undefined) {
-    data.passwordHash = createHash('sha256').update(data.passwordHash).digest('hex');
+    data.passwordHash = await argon2.hash(data.passwordHash, {
+      type: argon2.argon2id
+    })
   }
 
   await UsersRepository.Update(id, data);

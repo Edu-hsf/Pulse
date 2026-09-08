@@ -1,5 +1,5 @@
 import pool from "../../config/database";
-import { UpdateConversationDTO } from "../../types/conversations";
+import { UpdateConversationDTO } from "../../types/conversation";
 
 export async function Update(id: number, data: UpdateConversationDTO) {
   return pool.query(

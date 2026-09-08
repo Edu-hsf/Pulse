@@ -1,5 +1,5 @@
 import { ConversationsRepository, MessagesRepository, UsersRepository } from "../../repositories";
-import { CreateMessageDTO } from "../../types/messages";
+import { CreateMessageDTO } from "../../types/message";
 
 export async function Create(data: CreateMessageDTO) {
   if (data.participantId <= 0) {

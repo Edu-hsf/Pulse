@@ -1,5 +1,5 @@
 import { type Request, type Response } from "express";
-import { CreateMessageDTO } from "../../types/messages";
+import { CreateMessageDTO } from "../../types/message";
 import { MessagesService } from "../../services";
 
 export const Create = async (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
 import pool from "../../config/database";
-import { UpdateMessageDTO } from "../../types/messages";
+import { UpdateMessageDTO } from "../../types/message";
 
 export async function Update(id: number, data: UpdateMessageDTO) {
   const updates = [];

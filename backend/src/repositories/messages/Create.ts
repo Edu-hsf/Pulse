@@ -1,5 +1,5 @@
 import pool from "../../config/database";
-import { CreateMessageDTO } from "../../types/messages";
+import { CreateMessageDTO } from "../../types/message";
 
 export function Create (data: CreateMessageDTO) {
     return pool.query(

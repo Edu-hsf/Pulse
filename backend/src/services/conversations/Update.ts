@@ -1,5 +1,5 @@
 import { ConversationsRepository, UsersRepository } from "../../repositories";
-import { UpdateConversationDTO } from "../../types/conversations";
+import { UpdateConversationDTO } from "../../types/conversation";
 
 export async function update(id: number, data: UpdateConversationDTO) {
   if (id <= 0) {
