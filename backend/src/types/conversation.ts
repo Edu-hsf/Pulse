@@ -3,19 +3,19 @@ import { messageResponseSchema } from "./message";
 
 export const conversationSchema = z.object({
     id: z.number(),
-    participantAdminID: z.number().optional(),
     createdAt: z.coerce.date(),
     createdBy: z.number().optional(),
-    avatar: z.string().optional(),
+    deletedAt: z.coerce.date(),
 });
 
 export const updateConversationSchema = z.object({
-  participantAdminId: z.number(),
+  deletedAt: z.coerce.date(),
 });
 
-export const conversationResponse = conversationSchema.extend({
-  lastMessage: messageResponseSchema.optional()
+export const conversationResponseSchema = conversationSchema.extend({
+  lastMessage: messageResponseSchema.optional(),
 })
 
 export type Conversation = z.infer<typeof conversationSchema>;
+export type ConversationResponse = z.infer<typeof conversationResponseSchema>;
 export type UpdateConversationDTO = z.infer<typeof updateConversationSchema>;

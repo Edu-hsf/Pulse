@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { conversationParticipantSchema } from "./conversationParticipant";
-import { messageAttachment } from "./messageAttachment";
+import { conversationParticipantResponseSchema } from "./conversationParticipant";
+import { messageAttachmentResponseSchema } from "./messageAttachment";
 
 export const messageSchema = z.object({
     id: z.number(),
@@ -24,14 +24,15 @@ export const updateMessageSchema = z.object({
 
 export const messageResponseSchema = z.object({
   id: z.number(),
-  participant: conversationParticipantSchema,
+  participant: conversationParticipantResponseSchema,
   conversationId: z.number(),
   content: z.string().min(1).max(4000).optional(),
   createdAt: z.coerce.date(),
   deletedAt: z.coerce.date().optional(),
-  attachment: messageAttachment.optional(),
+  attachment: messageAttachmentResponseSchema.optional(),
 })
 
 export type Message = z.infer<typeof messageSchema>;
+export type MessageResponse = z.infer<typeof messageResponseSchema>;
 export type CreateMessageDTO = z.infer<typeof createMessageSchema>;
 export type UpdateMessageDTO = z.infer<typeof updateMessageSchema>;

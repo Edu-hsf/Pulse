@@ -5,7 +5,6 @@ export const userSchema = z.object({
   name: z.string(),
   email: z.email(),
   avatar: z.string().nullish(),
-  passwordHash: z.string().min(1),
   createdAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullish(),
 });
@@ -24,6 +23,14 @@ export const updateUserSchema = z.object({
   deletedAt: z.coerce.date().optional().optional(),
 });
 
+export const userWithPassword = userSchema.extend({
+  passwordHash: z.string(),
+})
+
+export const userResponseSchema = userSchema;
+
 export type User = z.infer<typeof userSchema>;
+export type UserResponse = z.infer<typeof userResponseSchema>;
+export type UserWithPassword = z.infer<typeof userWithPassword>;
 export type CreateUserDTO = z.infer<typeof createUserSchema>;
 export type UpdateUserDTO = z.infer<typeof updateUserSchema>;
