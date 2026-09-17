@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const userSchema = z.object({
+export const userResponseSchema = z.object({
   id: z.number(),
   name: z.string(),
   email: z.email(),
@@ -23,13 +23,10 @@ export const updateUserSchema = z.object({
   deletedAt: z.coerce.date().optional().optional(),
 });
 
-export const userWithPassword = userSchema.extend({
+export const userWithPassword = userResponseSchema.extend({
   passwordHash: z.string(),
 })
 
-export const userResponseSchema = userSchema;
-
-export type User = z.infer<typeof userSchema>;
 export type UserResponse = z.infer<typeof userResponseSchema>;
 export type UserWithPassword = z.infer<typeof userWithPassword>;
 export type CreateUserDTO = z.infer<typeof createUserSchema>;

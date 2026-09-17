@@ -2,7 +2,7 @@ import { UpdateUserDTO } from "../../types/user";
 import pool from "../../config/database";
 
 export async function Update(id: number, data: UpdateUserDTO) {
-    const updates = [];
+  const updates = [];
   const values = [];
 
   values.push(id);

@@ -13,3 +13,13 @@ export async function GetByID(id: number) {
 
   return user;
 }
+
+export async function GetByEmailAndPassword(email: string, password: string) {
+  const user = await UsersRepository.GetByEmailAndPassword(email, password)
+
+  if (!user) {
+    throw new Error('Email ou senha inválidos.')
+  }
+
+  return user;
+}

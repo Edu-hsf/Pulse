@@ -1,14 +1,14 @@
 import z from "zod";
+import { userResponseSchema } from "./user";
 
-export const conversationParticipantSchema = z.object({
+export const conversationParticipantResponseSchema = z.object({
     id: z.number(),
-    userId: z.number(),
-    conversationId: z.number(),
+    user: userResponseSchema,
     joinedAt: z.coerce.date(),
-    addBy: z.number().optional(),
     leftAt: z.coerce.date().optional(),
+    addBy: z.number().optional(),
     removedBy: z.number().optional(),
-    lastReadMessageId: z.number().optional(),
+    role: z.enum(['admin', 'super_admin', 'member']).default('member'),
 })
 
 export const createConversationParticipantSchema = z.object({
@@ -24,9 +24,6 @@ export const updateConversationParticipantSchema = z.object({
     lastReadMessageId: z.number().optional(),
 })
 
-export const conversationParticipantResponseSchema = conversationParticipantSchema;
-
-export type ConversationParticipant = z.infer<typeof conversationParticipantSchema>;
 export type ConversationParticipantResponse = z.infer<typeof conversationParticipantResponseSchema>;
 export type CreateConversationParticipantDTO = z.infer<typeof createConversationParticipantSchema>;
 export type UpdateConversationParticipantDTO = z.infer<typeof updateConversationParticipantSchema>;

@@ -1,4 +1,6 @@
 import { ConversationsRepository, UsersRepository } from '../../repositories/';
+import { ConversationResponse } from '../../types/conversation';
+import { MessagesService } from '../messages';
 
 export async function GetByID(id: number) {
   if (id <= 0) {
@@ -25,7 +27,13 @@ export async function GetAllByUserID(userAdminId: number) {
     throw new Error('O usuário informado não existe ou está desativado.');
   }
 
-  const conversations = await ConversationsRepository.GetAllByUserID(userAdminId);
+  const conversationsRaw = await ConversationsRepository.GetAllByUserID(userAdminId);
+
+  const conversations = await Promise.all(conversationsRaw.map(async (conversation) => {
+    const message = await MessagesService.GetLastByConversationID(conversation.id);
+
+    return { ...conversation, lastMassage: message } as ConversationResponse
+  }))
 
   return conversations;
 }

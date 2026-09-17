@@ -29,3 +29,17 @@ export async function GetAllByConversationID(conversationId: number) {
 
   return messages;
 }
+
+export async function GetLastByConversationID(id: number) {
+  if (id <= 0) {
+    throw new Error("ID inválido.");
+  }
+
+  const conversation = await ConversationsRepository.GetByID(id);
+
+  if (!conversation) {
+    throw new Error('conversa não encontrada.');
+  }
+
+  return conversation;
+}
