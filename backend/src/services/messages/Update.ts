@@ -1,6 +1,6 @@
 
 import { MessagesRepository } from "../../repositories";
-import { UpdateMessageDTO } from "../../types/messages";
+import { UpdateMessageDTO } from "../../types/message";
 
 export async function update(id: number, data: UpdateMessageDTO) {
   if (id <= 0) {
@@ -11,7 +11,7 @@ export async function update(id: number, data: UpdateMessageDTO) {
     throw new Error("Nenhum campo informado.");
   }
 
-  const message = await MessagesRepository.GetByID(id);
+  const message = await MessagesRepository.ExistsByID(id);
 
   if (!message) {
     throw new Error("Mensagem não encontrada.");

@@ -1,35 +1,41 @@
-import argon2 from "argon2";
 import pool from "../../config/database";
-import { UserResponse, UserWithPassword } from "../../types/user";
+import { userResponseSchema } from "../../types/user";
 
-export async function GetByEmail(email: string) {
-    const result = await pool.query('SELECT ID, NAME, EMAIL, AVATAR, CREATED_AT, DELETED_AT FROM USERS WHERE EMAIL = LOWER($1)', [email])
+export async function GetByID(id: number) {
+    const result = await pool.query(`
+        SELECT 
+            ID AS id, 
+            NAME AS name, 
+            EMAIL AS email, 
+            AVATAR AS avatar, 
+            CREATED_AT AS createdAt, 
+            DELETED_AT AS deletedAt 
+        FROM USERS 
+        WHERE ID = $1`,  [id]);
 
-    return (result.rows[0] as UserResponse | undefined) ?? null;
+    const user = result.rows[0];
+
+    return user ? userResponseSchema.parse(user) : null;
 }
 
-export async function GetByEmailAndPassword(email: string, password: string) {
-     const result = await pool.query(
-        `SELECT ID, NAME, EMAIL, AVATAR, PASSWORD_HASH, CREATED_AT, DELETED_AT
-         FROM USERS
-         WHERE EMAIL = LOWER($1)`,
-        [email]
-    );
+export async function GetByEmail(email: string) {
+    const result = await pool.query(`
+        SELECT DELETED_AT AS deletedAt
+        FROM USERS 
+        WHERE LOWER(EMAIL) = LOWER($1)
+        ORDER BY ID DESC
+        LIMIT 1
+    `, [email])
 
-    const user = result.rows[0] as UserWithPassword;
+    const user = result.rows[0];
 
-    if (!user) {
-        return null;
-    }
+    return user ? user : null;
+}
 
-    const valid = await argon2.verify(
-        user.passwordHash,
-        password
-    );
+export async function GetPasswordByEmail(email: string) {
+    const result = await pool.query('SELECT PASSWORD AS password FROM USERS WHERE LOWER(EMAIL) = LOWER($1)', [email])
 
-    if (!valid) {
-        return null;
-    }
+    const passwordHash = result.rows[0];
 
-    return user as UserResponse;
+    return passwordHash ? passwordHash : null;
 }

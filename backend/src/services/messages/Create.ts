@@ -16,7 +16,7 @@ export async function Create(data: CreateMessageDTO) {
     throw new Error("O usuário informado não existe ou está desativado.");
   }
 
-  const conversation = await ConversationsRepository.GetByID(data.conversationId);
+  const conversation = await ConversationsRepository.ExistsByID(data.conversationId);
 
   if (!conversation) {
     throw new Error("O conversa informada não existe.");

@@ -1,24 +1,15 @@
 import { UsersRepository } from "../../repositories";
-
-export async function GetByID(id: number) {
-  if (id <= 0) {
-    throw new Error("ID inválido.");
-  }
-
-  const user = await UsersRepository.GetByID(id);
-
-  if (!user) {
-    throw new Error("Usuário não encontrado.");
-  }
-
-  return user;
-}
+import argon2 from "argon2";
 
 export async function GetByEmailAndPassword(email: string, password: string) {
-  const user = await UsersRepository.GetByEmailAndPassword(email, password)
+  const passwordHash = await argon2.hash(password, {
+    type: argon2.argon2id
+  })
 
-  if (!user) {
-    throw new Error('Email ou senha inválidos.')
+  const password = await UsersRepository.GetPasswordByEmail(email)
+
+  if (!password) {
+    throw new Error('E')
   }
 
   return user;

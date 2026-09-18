@@ -12,7 +12,7 @@ export const userResponseSchema = z.object({
 export const createUserSchema = z.object({
   name: z.string(),
   email: z.email(),
-  passwordHash: z.string().min(1),
+  password: z.string().min(1),
 });
 
 export const updateUserSchema = z.object({

@@ -2,8 +2,8 @@ import { type Request, type Response } from "express";
 import { UsersService } from "../../services";
 import { CreateUserDTO } from "../../types/user";
 
-export const Create = async (req: Request, res: Response) => {
-  const data = req.body as CreateUserDTO;
+export const Create = async (req: Request<{}, {}, CreateUserDTO>, res: Response) => {
+  const data = req.body;
 
   try {
     await UsersService.Create(data);

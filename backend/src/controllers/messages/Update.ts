@@ -2,8 +2,8 @@ import { type Request, type Response } from "express";
 import { UpdateMessageDTO } from "../../types/message";
 import { MessagesService } from "../../services";
 
-export const Update = async (req: Request, res: Response) => {
-  const data = req.body as UpdateMessageDTO;
+export const Update = async (req: Request<{ id: number }, {}, UpdateMessageDTO>, res: Response) => {
+  const data = req.body;
   const { id } = req.params;
 
   try {

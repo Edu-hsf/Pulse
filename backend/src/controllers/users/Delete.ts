@@ -1,7 +1,7 @@
 import { type Request, type Response } from "express";
 import { UsersService } from "../../services";
 
-export const Delete = async (req: Request, res: Response) => {
+export const Delete = async (req: Request<{ id: number }>, res: Response) => {
   const { id }  = req.params;
 
   try {

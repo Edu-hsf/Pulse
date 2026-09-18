@@ -1,6 +1,14 @@
 import pool from "../../config/database";
 import { messageResponseSchema } from "../../types/message";
 
+export async function ExistsByID(id: number) {
+    const result = await pool.query('SELECT ID FROM MESSAGES WHERE ID = $1', [id]);
+
+    const message = result.rows[0]
+
+    return message ? true : false
+}
+
 export async function GetMessagesByConversationID (conversationId: number, limit: number, cursor?: number) {
     const result = cursor 
     ? await pool.query(`
@@ -65,6 +73,8 @@ export async function GetMessagesByConversationID (conversationId: number, limit
         WHERE M.CONVERSATION_ID = $1
         ORDER BY M.ID DESC
         LIMIT $2`, [conversationId, limit])
+
+    const messages = result.rows
     
-    return messageResponseSchema.array().parse(result.rows);
+    return messages ? messageResponseSchema.array().parse(messages) : null;
 }

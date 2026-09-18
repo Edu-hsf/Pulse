@@ -6,7 +6,7 @@ export async function Delete(id: number) {
     throw new Error("ID inválido.");
   }
 
-  const message = await MessagesRepository.GetByID(id);
+  const message = await MessagesRepository.ExistsByID(id);
   
   if (!message) {
     throw new Error("Mensagem não encontrada.");

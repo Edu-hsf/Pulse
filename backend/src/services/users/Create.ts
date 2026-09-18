@@ -13,7 +13,7 @@ export async function Create(data: CreateUserDTO) {
     throw new Error("Já existe um usuário ativo com esse email.");
   }
 
-  data.passwordHash = await argon2.hash(data.passwordHash, {
+  data.password = await argon2.hash(data.password, {
     type: argon2.argon2id
   })
 
