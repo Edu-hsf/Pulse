@@ -7,7 +7,6 @@ export const messageAttachmentResponseSchema = z.object({
 })
 
 export const createMessageAttachmentSchema = z.object({
-    messageId: z.number(),
     type: z.enum(['image', 'audio', 'video', 'file']),
     url: z.string(),
 })

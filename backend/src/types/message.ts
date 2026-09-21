@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { conversationParticipantResponseSchema } from "./conversationParticipant";
-import { messageAttachmentResponseSchema } from "./messageAttachment";
+import { createMessageAttachmentSchema, messageAttachmentResponseSchema } from "./messageAttachment";
 
 export const messageResponseSchema = z.object({
   id: z.number(),
@@ -15,6 +15,7 @@ export const createMessageSchema = z.object({
   participantId: z.number(),
   conversationId: z.number(),
   content: z.string().optional(),
+  attachment: createMessageAttachmentSchema.optional(),
 });
 
 export const updateMessageSchema = z.object({
