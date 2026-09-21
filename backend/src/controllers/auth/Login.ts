@@ -15,7 +15,7 @@ export const LoginWithEmailAndPassword = async (req: Request<{}, {}, { email: st
     }
 
     const token = jwt.sign({ sub, name }, secretKey, {
-      expiresIn: 60,
+      expiresIn: '1d',
       algorithm: "HS256",
     })
 
