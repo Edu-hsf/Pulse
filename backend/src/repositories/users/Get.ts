@@ -1,5 +1,5 @@
 import pool from "../../config/database";
-import { userResponseSchema } from "../../types/user";
+import { userPayloadSchema, userResponseSchema } from "../../types/user";
 
 export async function GetByID(id: number) {
     const result = await pool.query(`
@@ -20,7 +20,11 @@ export async function GetByID(id: number) {
 
 export async function GetByEmail(email: string) {
     const result = await pool.query(`
-        SELECT DELETED_AT AS deletedAt
+        SELECT 
+            ID AS id,
+            NAME AS name,
+            DELETED_AT AS deletedAt,
+            PASSWORD_HASH AS passwordHash
         FROM USERS 
         WHERE LOWER(EMAIL) = LOWER($1)
         ORDER BY ID DESC
@@ -29,13 +33,5 @@ export async function GetByEmail(email: string) {
 
     const user = result.rows[0];
 
-    return user ? user : null;
-}
-
-export async function GetPasswordByEmail(email: string) {
-    const result = await pool.query('SELECT PASSWORD AS password FROM USERS WHERE LOWER(EMAIL) = LOWER($1)', [email])
-
-    const passwordHash = result.rows[0];
-
-    return passwordHash ? passwordHash : null;
+    return user ? userPayloadSchema.parse(user) : null;
 }

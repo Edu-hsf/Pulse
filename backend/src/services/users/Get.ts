@@ -1,15 +1,14 @@
 import { UsersRepository } from "../../repositories";
-import argon2 from "argon2";
 
-export async function GetByEmailAndPassword(email: string, password: string) {
-  const passwordHash = await argon2.hash(password, {
-    type: argon2.argon2id
-  })
+export async function GetByID(id: number) {
+  if (id <= 0) {
+    throw new Error('ID inválido.')
+  }
 
-  const password = await UsersRepository.GetPasswordByEmail(email)
+  const user = await UsersRepository.GetByID(id);
 
-  if (!password) {
-    throw new Error('E')
+  if (!user || user.deletedAt) {
+    throw new Error('Usuário não existe ou está desativado.')
   }
 
   return user;

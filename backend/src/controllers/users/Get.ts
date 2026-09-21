@@ -1,15 +1,15 @@
 import { type Request, type Response } from "express";
 import { UsersService } from "../../services";
 
-export const GetByEmailAndPassword = async (req: Request<{ email: string, password: string }>, res: Response) => {
-  const { email, password } = req.params;
+export const GetByID = async (req: Request<{ id: number }>, res: Response) => {
+  const { id } = req.params;
 
   try {
-    const user = await UsersService.GetByEmailAndPassword(email, password);
-
-    res.status(200).json(user);
+    const user = await UsersService.GetByID(id);
+    
+    res.status(200).json(user)
   } catch (error) {
-    console.error(`[${req.method} ${req.originalUrl}]`, error);
-    res.status(500).json({ error: "Erro ao fazer login." });
+    console.log(`${req.method} ${req.originalUrl}`, error);
+    res.status(500).json({ error: "Erro ao consultar usuário." });
   }
 }

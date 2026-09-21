@@ -1,5 +1,6 @@
 import app from "./app";
 import pool from "./config/database";
+import 'dotenv/config'
 
 const PORT = process.env.DB_PORT || 3000;
 
