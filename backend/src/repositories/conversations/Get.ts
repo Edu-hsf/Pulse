@@ -1,6 +1,6 @@
 import { z } from "zod";
 import pool from "../../config/database";
-import { conversationResponseSchema } from "../../types/conversation";
+import { ConversationPrivateResponse, conversationResponseSchema } from "../../types/conversation";
 
 export async function ExistsByID(id: number) {
     const result = await pool.query('SELECT ID FROM CONVERSATIONS WHERE ID = $1', [id])
@@ -78,7 +78,7 @@ export async function GetAllByUserID(userId: number) {
     const conversations = result.rows.map((row: any) => {
         const isGroup = row.is_group === true || row.is_group === "true";
 
-        const baseConversation = {
+        const baseConversation: ConversationPrivateResponse = {
             id: Number(row.id),
             createdAt: row.created_at,
             createdBy: row.created_by ? Number(row.created_by) : undefined,
@@ -87,9 +87,34 @@ export async function GetAllByUserID(userId: number) {
             settings: isGroup
                 ? row.conversation_groups_settings
                 : row.conversation_privates_settings,
-            
-
-        };
+            lastMessage: row.message_id ? {
+                id: Number(row.message_id),
+                participant: {
+                    id: Number(row.participant_id),
+                    user: {
+                        id: Number(row.user_id),
+                        name: row.user_name,
+                        email: row.user_email,
+                        avatar: row.user_avatar,
+                        createdAt: row.user_created_at,
+                        deletedAt: row.user_deleted_at,
+                    },
+                    role: row.participant_role,
+                    joinedAt: row.participant_joined_at,
+                    leftAt: row.participant_left_at,
+                    addBy: row.participant_add_by,
+                    removedBy: row.participant_removed_at,
+                },
+                content: row.message_content,
+                createdAt: row.message_created_by,
+                deletedAt: row.message_deleted_at,
+                attachment: row.attachment_id ? {
+                    id: Number(row.attachment_id),
+                    type: row.attachment_type,
+                    url: row.attachment_url,
+                } : undefined,      
+            } : undefined,
+        }
 
         if (isGroup) {
             return {
@@ -103,5 +128,5 @@ export async function GetAllByUserID(userId: number) {
         return baseConversation;
     });
 
-    return conversations ? z.array(conversationResponseSchema).parse(conversations) : null;
+    return z.array(conversationResponseSchema).parse(conversations);
 }

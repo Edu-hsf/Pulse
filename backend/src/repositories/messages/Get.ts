@@ -1,5 +1,5 @@
 import pool from "../../config/database";
-import { messageResponseSchema } from "../../types/message";
+import { MessageResponse, messageResponseSchema } from "../../types/message";
 
 export async function ExistsByID(id: number) {
     const result = await pool.query('SELECT ID FROM MESSAGES WHERE ID = $1', [id]);
@@ -26,12 +26,12 @@ export async function GetMessagesByConversationID (conversationId: number, limit
                     CP.ADD_BY AS participant_add_by,
                     CP.REMOVED_BY AS participant_removed_at,
                     CP.ROLE AS participant_role,
-                        ATT.ID AS attachment_id,
-                        ATT.TYPE AS attachment_type,
-                        ATT.URL AS attachment_url,
                 M.CONTENT AS content,
                 M.CREATED_AT AS created_at,
-                M.DELETED_AT AS deleted_at
+                M.DELETED_AT AS deleted_at,
+                    ATT.ID AS attachment_id,
+                    ATT.TYPE AS attachment_type,
+                    ATT.URL AS attachment_url
             FROM MESSAGES M
             LEFT JOIN CONVERSATION_PARTICIPANTS CP
                 ON CP.ID = M.PARTICIPANT_ID
@@ -57,12 +57,12 @@ export async function GetMessagesByConversationID (conversationId: number, limit
                     CP.ADD_BY AS participant_add_by,
                     CP.REMOVED_BY AS participant_removed_at,
                     CP.ROLE AS participant_role,
-                        ATT.ID AS attachment_id,
-                        ATT.TYPE AS attachment_type,
-                        ATT.URL AS attachment_url,
                 M.CONTENT AS content,
                 M.CREATED_AT AS created_at,
-                M.DELETED_AT AS deleted_at
+                M.DELETED_AT AS deleted_at,
+                    ATT.ID AS attachment_id,
+                    ATT.TYPE AS attachment_type,
+                    ATT.URL AS attachment_url
             FROM MESSAGES M
             LEFT JOIN CONVERSATION_PARTICIPANTS CP
                 ON CP.ID = M.PARTICIPANT_ID
@@ -74,7 +74,37 @@ export async function GetMessagesByConversationID (conversationId: number, limit
             ORDER BY M.ID DESC
             LIMIT $2`, [conversationId, limit])
 
-    const messages = result.rows
+    const messages = result.rows.map((row: any) => {
+        const message: MessageResponse = {
+            id: Number(row.id),
+            participant: {
+                id: Number(row.participant_id),
+                user: {
+                    id: Number(row.user_id),
+                    name: row.user_name,
+                    email: row.user_email,
+                    avatar: row.user_avatar,
+                    createdAt: row.user_created_at,
+                    deletedAt: row.user_deleted_at,
+                },
+                role: row.participant_role,
+                joinedAt: row.participant_joined_at,
+                leftAt: row.participant_left_at,
+                addBy: row.participant_add_by,
+                removedBy: row.participant_removed_at,
+            },
+            content: row.content,
+            createdAt: row.created_by,
+            deletedAt: row.deleted_at,
+            attachment: row.attachment_id ? {
+                id: Number(row.attachment_id),
+                type: row.attachment_type,
+                url: row.attachment_url,
+            } : undefined,
+        }
+
+        return message;
+    });
     
-    return messages ? messageResponseSchema.array().parse(messages) : null;
+    return messageResponseSchema.array().parse(messages);
 }
