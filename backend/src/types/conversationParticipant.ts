@@ -12,7 +12,6 @@ export const conversationParticipantResponseSchema = z.object({
 })
 
 export const createConversationParticipantSchema = z.object({
-    id: z.number(),
     userId: z.number(),
     conversationId: z.number(),
     addBy: z.number().optional(),
@@ -22,6 +21,7 @@ export const updateConversationParticipantSchema = z.object({
     leftAt: z.coerce.date().optional(),
     removedBy: z.number().optional(),
     lastReadMessageId: z.number().optional(),
+    role: z.enum(['admin', 'super_admin', 'member']).optional(),
 })
 
 export type ConversationParticipantResponse = z.infer<typeof conversationParticipantResponseSchema>;

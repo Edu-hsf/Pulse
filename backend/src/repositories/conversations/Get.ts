@@ -28,9 +28,6 @@ export async function GetAllByUserID(userId: number) {
             CPV.settings AS conversation_privates_settings,
             M1.unread_messages,
                 M2.id AS message_id, 
-                M2.content AS message_content, 
-                M2.created_at AS message_created_at, 
-                M2.deleted_at AS message_deleted_at,
                     MCP.ID AS participant_id,
                         U.ID AS user_id,
                         U.NAME AS user_name,
@@ -43,9 +40,12 @@ export async function GetAllByUserID(userId: number) {
                     MCP.ADD_BY AS participant_add_by,
                     MCP.REMOVED_BY AS participant_removed_at,
                     MCP.ROLE AS participant_role,
-                        MATT.ID AS attachment_id,
-                        MATT.TYPE AS attachment_type,
-                        MATT.URL AS attachment_url
+                M2.content AS message_content, 
+                M2.created_at AS message_created_at, 
+                M2.deleted_at AS message_deleted_at,
+                    MATT.ID AS attachment_id,
+                    MATT.TYPE AS attachment_type,
+                    MATT.URL AS attachment_url
         FROM conversationS C
         INNER JOIN conversation_participants CP
             ON CP.conversation_id = C.id 
