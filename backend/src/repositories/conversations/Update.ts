@@ -9,14 +9,9 @@ export async function Update(id: number, data: UpdateConversationDTO) {
 
   let index = 1;
 
-  if (data.participantAdminId !== undefined) {
-    updates.push("PARTICIPANT_ADMIN_ID = $" + ++index);
-    values.push(data.participantAdminId);
-  }
-
-  if (data.avatar !== undefined) {
-    updates.push("AVATAR = $" + ++index);
-    values.push(data.avatar);
+  if (data.deletedAt !== undefined) {
+    updates.push("DELETED_AT = $" + ++index);
+    values.push(data.deletedAt);
   }
 
   return pool.query(
