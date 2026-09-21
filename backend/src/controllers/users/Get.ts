@@ -9,7 +9,7 @@ export const GetByID = async (req: Request<{ id: number }>, res: Response) => {
     
     res.status(200).json(user)
   } catch (error) {
-    console.log(`${req.method} ${req.originalUrl}`, error);
+    console.error(`${req.method} ${req.originalUrl}`, error);
     res.status(500).json({ error: "Erro ao consultar usuário." });
   }
 }

@@ -1,14 +1,9 @@
 import { Router } from "express";
-import { UsersController } from '../controllers'
+import { AuthController } from '../controllers'
 
 const authRouter = Router();
 
-authRouter.post("/", UsersController.Create);
-
-authRouter.patch("/:id", UsersController.Update);
-
-authRouter.delete('/:id', UsersController.Delete)
-
-authRouter.get('/:id', UsersController.GetByID)
+authRouter.post("/login", AuthController.LoginWithEmailAndPassword);
+authRouter.post("/signup", AuthController.Signup)
 
 export { authRouter };

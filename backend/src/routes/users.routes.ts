@@ -3,8 +3,6 @@ import { UsersController } from '../controllers'
 
 const usersRouter = Router();
 
-usersRouter.post("/", UsersController.Create);
-
 usersRouter.patch("/:id", UsersController.Update);
 
 usersRouter.delete('/:id', UsersController.Delete)

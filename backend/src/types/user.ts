@@ -26,7 +26,7 @@ export const updateUserSchema = z.object({
 export const userPayloadSchema = z.object({
   sub: z.number(),
   name: z.string(),
-  deletedAt: z.coerce.date().optional(),
+  deletedAt: z.coerce.date().nullable(),
   passwordHash: z.string(),
 })
 

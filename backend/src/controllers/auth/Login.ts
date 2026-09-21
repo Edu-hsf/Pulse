@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import { AuthService } from "../../services";
 import 'dotenv/config'
 
-export const LoginWithEmailAndPassword = async (req: Request<{ email: string, password: string }>, res: Response) => {
-  const { email, password } = req.params;
+export const LoginWithEmailAndPassword = async (req: Request<{}, {}, { email: string, password: string }>, res: Response) => {
+  const { email, password } = req.body;
 
   try {
     const { sub, name } = await AuthService.LoginWithEmailAndPassword(email, password);
@@ -15,7 +15,7 @@ export const LoginWithEmailAndPassword = async (req: Request<{ email: string, pa
     }
 
     const token = jwt.sign({ sub, name }, secretKey, {
-      expiresIn: '1d',
+      expiresIn: 60,
       algorithm: "HS256",
     })
 

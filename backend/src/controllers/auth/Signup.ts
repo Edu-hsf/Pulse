@@ -1,12 +1,12 @@
 import { type Request, type Response } from "express";
-import { UsersService } from "../../services";
+import { AuthService } from "../../services";
 import { CreateUserDTO } from "../../types/user";
 
-export const Create = async (req: Request<{}, {}, CreateUserDTO>, res: Response) => {
+export const Signup = async (req: Request<{}, {}, CreateUserDTO>, res: Response) => {
   const data = req.body;
 
   try {
-    await UsersService.Create(data);
+    await AuthService.Signup(data);
 
     res.status(201).json({ message: "Usuário cadastrado com sucesso!" });
   } catch (error) {

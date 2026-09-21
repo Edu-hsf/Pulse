@@ -2,11 +2,7 @@ import { UsersRepository } from "../../repositories";
 import { CreateUserDTO } from "../../types/user";
 import argon2 from "argon2";
 
-export async function Create(data: CreateUserDTO) {
-  if (Object.keys(data).length === 0) {
-    throw new Error("Nenhum campo informado.");
-  }
-
+export async function Signup(data: CreateUserDTO) {
   const user = await UsersRepository.GetByEmail(data.email);
 
   if (user && !user.deletedAt) {

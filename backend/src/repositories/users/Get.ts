@@ -8,8 +8,8 @@ export async function GetByID(id: number) {
             NAME AS name, 
             EMAIL AS email, 
             AVATAR AS avatar, 
-            CREATED_AT AS createdAt, 
-            DELETED_AT AS deletedAt 
+            CREATED_AT AS "createdAt", 
+            DELETED_AT AS "deletedAt" 
         FROM USERS 
         WHERE ID = $1`,  [id]);
 
@@ -21,10 +21,10 @@ export async function GetByID(id: number) {
 export async function GetByEmail(email: string) {
     const result = await pool.query(`
         SELECT 
-            ID AS id,
+            ID AS sub,
             NAME AS name,
-            DELETED_AT AS deletedAt,
-            PASSWORD_HASH AS passwordHash
+            DELETED_AT AS "deletedAt",
+            PASSWORD_HASH AS "passwordHash"
         FROM USERS 
         WHERE LOWER(EMAIL) = LOWER($1)
         ORDER BY ID DESC
@@ -32,6 +32,8 @@ export async function GetByEmail(email: string) {
     `, [email])
 
     const user = result.rows[0];
+
+    console.log(user)
 
     return user ? userPayloadSchema.parse(user) : null;
 }

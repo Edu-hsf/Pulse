@@ -9,7 +9,6 @@ messagesRouter.patch("/:id", MessagesController.Update);
 
 messagesRouter.delete('/:id', MessagesController.Delete)
 
-messagesRouter.get('/:id', MessagesController.GetByID)
-messagesRouter.get('/conversation/:conversationId', MessagesController.GetAllByConversationID)
+messagesRouter.get('/conversation/:conversationId', MessagesController.GetMessagesByConversationID)
 
 export { messagesRouter }; 

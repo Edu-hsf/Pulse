@@ -9,7 +9,6 @@ conversationsRouter.patch("/:id", ConversationsController.Update);
 
 conversationsRouter.delete('/:id', ConversationsController.Delete)
 
-conversationsRouter.get('/:id', ConversationsController.GetByID)
 conversationsRouter.get('/user/:userId', ConversationsController.GetAllByUserID)
 
 export { conversationsRouter };
