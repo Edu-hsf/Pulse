@@ -1,9 +1,11 @@
 import { type Request, type Response } from "express";
 import { ConversationsService } from "../../services";
 
-export const Create = async (req: Request, res: Response) => {
+export const Create = async (req: Request<{}, {}, { userId: number }>, res: Response) => {
+  const { userId }  = req.body;
+
   try {
-    await ConversationsService.Create();
+    await ConversationsService.Create(userId);
 
     res.status(201).json({ message: "Conversa criada com sucesso!" });
   } catch (error) {

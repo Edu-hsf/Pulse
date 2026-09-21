@@ -1,6 +1,5 @@
-import { UsersRepository } from "../../repositories";
 import { ConversationsRepository } from "../../repositories";
 
-export async function Create() {
-  await ConversationsRepository.Create();
+export async function Create(userId: number) {
+  await ConversationsRepository.Create(userId);
 }
