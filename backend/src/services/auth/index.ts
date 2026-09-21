@@ -1,5 +1,5 @@
-import * as sign from './Sign';
+import * as login from './Login';
 
 export const AuthService = {
-    ...sign,
+    ...login,
 }

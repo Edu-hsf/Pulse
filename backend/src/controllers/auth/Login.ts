@@ -7,7 +7,7 @@ export const LoginWithEmailAndPassword = async (req: Request<{ email: string, pa
   const { email, password } = req.params;
 
   try {
-    const { sub, name } = await AuthService.SignWithEmailAndPassword(email, password);
+    const { sub, name } = await AuthService.LoginWithEmailAndPassword(email, password);
     const secretKey = process.env.TOKEN_SECRET_KEY;
 
     if (!secretKey) {

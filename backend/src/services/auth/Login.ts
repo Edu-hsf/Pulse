@@ -1,7 +1,7 @@
 import { UsersRepository } from "../../repositories";
 import argon2 from "argon2";
 
-export async function SignWithEmailAndPassword(email: string, password: string) {
+export async function LoginWithEmailAndPassword(email: string, password: string) {
   const user = await UsersRepository.GetByEmail(email)
 
   if (
