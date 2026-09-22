@@ -38,11 +38,19 @@ export async function Create (data: CreateConversationDTO) {
 
         const conversationId = conversationResult.rows[0].id;
 
-        const participantResult = await client.query(`INSERT INTO CONVERSATION_PARTICIPANTS (USER_ID, CONVERSATION_ID, ROLE) VALUES ($1, $2, 'super_admin') RETURNING id`, [data.createdBy, conversationId]);
+        const participantOwnerResult = await client.query(`INSERT INTO CONVERSATION_PARTICIPANTS (USER_ID, CONVERSATION_ID, ROLE) VALUES ($1, $2, 'super_admin') RETURNING id`, [data.createdBy, conversationId]);
 
-        const participantId = participantResult.rows[0].id;
+        const participantOwnerId = participantOwnerResult.rows[0].id;
 
-        await client.query(`UPDATE CONVERSATIONS SET CREATED_BY = $1 WHERE ID = $2`, [participantId, conversationId]);
+        await client.query(`UPDATE CONVERSATIONS SET CREATED_BY = $1 WHERE ID = $2`, [participantOwnerId, conversationId]);
+
+        if ("participantsUserId" in data) {
+            for (const userId in data.participantsUserId) {
+                await client.query(`INSERT INTO CONVERSATION_PARTICIPANTS (USER_ID, CONVERSATION_ID, ROLE) VALUES ($1, $2, 'member') RETURNING id`, [userId, conversationId]);
+            }
+        } else {
+            await client.query(`INSERT INTO CONVERSATION_PARTICIPANTS (USER_ID, CONVERSATION_ID, ROLE) VALUES ($1, $2, 'member') RETURNING id`, [data.participantUserId, conversationId]);
+        }
         
         await client.query('COMMIT');
     } catch (error) {

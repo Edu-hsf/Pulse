@@ -49,10 +49,12 @@ export const conversationResponseSchema = z.union([
 
 export const createConversationPrivateSchema = z.object({
   createdBy: z.number(),
+  participantUserId: z.number(),
 });
 
 export const createConversationGroupSchema = z.object({
   createdBy: z.number(),
+  participantsUserId: z.array(z.number()).min(1),
   name: z.string(),
   description: z.string().optional(),
   avatar: z.string().optional(),
