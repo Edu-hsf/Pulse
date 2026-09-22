@@ -1,19 +1,19 @@
-import { ConversationsRepository, MessagesRepository, UsersRepository } from "../../repositories";
+import { ConversationParticipantsRepository, ConversationsRepository, MessagesRepository, UsersRepository } from "../../repositories";
 import { CreateMessageDTO } from "../../types/message";
 
 export async function Create(data: CreateMessageDTO) {
   if (data.participantId <= 0) {
-    throw new Error("ID do usuário inválido.");
+    throw new Error("ID do participante inválido.");
   }
 
   if (data.conversationId <= 0) {
     throw new Error("ID da conversa inválido.");
   }
 
-  const user = await UsersRepository.GetByID(data.participantId);
+  const participant = await ConversationParticipantsRepository.GetByID(data.participantId);
 
-  if (!user || user.deletedAt) {
-    throw new Error("O usuário informado não existe ou está desativado.");
+  if (!participant || participant.deletedAt) {
+    throw new Error("O participante informado não existe ou está desativado.");
   }
 
   const conversation = await ConversationsRepository.ExistsByID(data.conversationId);

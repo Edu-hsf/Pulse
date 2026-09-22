@@ -2,10 +2,17 @@ import { z } from "zod";
 import pool from "../../config/database";
 import { conversationParticipantResponseSchema } from "../../types/conversationParticipant";
 
-export async function ExistsByID(id: number) {
-    const result = await pool.query('SELECT ID FROM CONVERSATION_PARTICIPANTS WHERE ID = $1', [id])
+export async function GetByID(id: number) {
+    const result = await pool.query(`
+            SELECT
+                U.DELETED_AT AS "deletedAt" 
+            FROM CONVERSATION_PARTICIPANTS CP
+            INNER JOIN USERS U
+                ON U.ID = CP.USER_ID
+            WHERE ID = $1
+        `, [id])
 
-    return result.rows[0] ? true : false;
+    return result.rows[0];
 }
 
 export async function GetAllByConversationID(conversationId: number) {

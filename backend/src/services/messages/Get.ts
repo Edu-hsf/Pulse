@@ -9,6 +9,10 @@ export async function GetMessagesByConversationID(conversationId: number, limit:
     throw new Error('Limite inválido.');
   }
 
+  if (cursor && cursor <= 0) {
+    throw new Error('Cursor inválido.');
+  }
+
   const conversation = await ConversationsRepository.ExistsByID(conversationId);
 
   if (!conversation) {

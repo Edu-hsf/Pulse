@@ -6,7 +6,7 @@ export async function Delete(id: number) {
     throw new Error("ID inválido.");
   }
 
-  const conversationParticipant = await ConversationParticipantsRepository.ExistsByID(id);
+  const conversationParticipant = await ConversationParticipantsRepository.GetByID(id);
   
   if (!conversationParticipant) {
     throw new Error("Participante não encontrado.");
