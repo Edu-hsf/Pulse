@@ -9,7 +9,7 @@ export const messageAttachmentResponseSchema = z.object({
 export const createMessageAttachmentSchema = z.object({
     type: z.enum(['image', 'audio', 'video', 'file']),
     url: z.string(),
-})
+}).strict();
 
 export type MessageAttachmentResponse = z.infer<typeof messageAttachmentResponseSchema>;
 export type CreateMessageAttachment = z.infer<typeof createMessageAttachmentSchema>;

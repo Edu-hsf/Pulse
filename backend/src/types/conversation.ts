@@ -50,7 +50,7 @@ export const conversationResponseSchema = z.union([
 export const createConversationPrivateSchema = z.object({
   createdBy: z.number(),
   participantUserId: z.number(),
-});
+}).strict();
 
 export const createConversationGroupSchema = z.object({
   createdBy: z.number(),
@@ -58,7 +58,7 @@ export const createConversationGroupSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   avatar: z.string().optional(),
-});
+}).strict();
 
 export const createConversationSchema = z.union([
   createConversationPrivateSchema,
@@ -72,7 +72,7 @@ export const updateConversationPrivateSchema = z.object({
       disappearingMessagesDuration: z.number().nullable().default(null),
     })
   }),
-});
+}).strict();
 
 export const updateConversationGroupSchema = z.object({
   name: z.string().optional(),
@@ -90,7 +90,7 @@ export const updateConversationGroupSchema = z.object({
       disappearingMessagesDuration: z.number().nullable().default(null),
     }),
   }).optional(),
-});
+}).strict();
 
 export const updateConversationSchema = z.union([
   updateConversationPrivateSchema,

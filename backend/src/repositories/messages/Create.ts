@@ -8,10 +8,10 @@ export async function Create (data: CreateMessageDTO) {
         await client.query('BEGIN');
 
         const messageResult = await client.query(
-        `INSERT INTO MESSAGES (PARTICIPANT_ID, CONVERSATION_ID, CONTENT)
+        `INSERT INTO MESSAGES (CREATED_BY, CONVERSATION_ID, CONTENT)
         VALUES ($1, $2, $3)
         RETURNING id`,
-        [data.participantId, data.conversationId, data.content ?? null]);
+        [data.createdBy, data.conversationId, data.content ?? null]);
 
         const messageId = messageResult.rows[0].id;
 
@@ -22,7 +22,7 @@ export async function Create (data: CreateMessageDTO) {
         await client.query(`
             UPDATE CONVERSATION_PARTICIPANTS
             SET LAST_READ_MESSAGE_ID = $1
-            WHERE ID = $2`, [messageId, data.participantId])
+            WHERE ID = $2`, [messageId, data.createdBy])
         
         await client.query('COMMIT');
 

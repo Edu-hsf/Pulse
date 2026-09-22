@@ -12,16 +12,16 @@ export const messageResponseSchema = z.object({
 });
 
 export const createMessageSchema = z.object({
-  participantId: z.number(),
+  createdBy: z.number(),
   conversationId: z.number(),
   content: z.string().optional(),
   attachment: createMessageAttachmentSchema.optional(),
-});
+}).strict();
 
 export const updateMessageSchema = z.object({
   content: z.string().optional(),
   deletedAt: z.coerce.date().optional(),
-});
+}).strict();
 
 export type MessageResponse = z.infer<typeof messageResponseSchema>;
 export type CreateMessageDTO = z.infer<typeof createMessageSchema>;

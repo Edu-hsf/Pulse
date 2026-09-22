@@ -9,20 +9,20 @@ export const conversationParticipantResponseSchema = z.object({
     addBy: z.number().optional(),
     removedBy: z.number().optional(),
     role: z.enum(['admin', 'super_admin', 'member']).default('member'),
-})
+});
 
 export const createConversationParticipantSchema = z.object({
     userId: z.number(),
     conversationId: z.number(),
     addBy: z.number().optional(),
-})
+}).strict();
 
 export const updateConversationParticipantSchema = z.object({
     leftAt: z.coerce.date().optional(),
     removedBy: z.number().optional(),
     lastReadMessageId: z.number().optional(),
     role: z.enum(['admin', 'super_admin', 'member']).optional(),
-})
+}).strict();
 
 export type ConversationParticipantResponse = z.infer<typeof conversationParticipantResponseSchema>;
 export type CreateConversationParticipantDTO = z.infer<typeof createConversationParticipantSchema>;

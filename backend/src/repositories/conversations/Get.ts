@@ -59,14 +59,14 @@ export async function GetAllByUserID(userId: number) {
             LIMIT 1
         ) M1 ON TRUE
         LEFT JOIN LATERAL (
-            SELECT M.id, M.participant_id, M.content, M.created_at, M.deleted_at 
+            SELECT M.id, M.CREATED_BY, M.content, M.created_at, M.deleted_at 
             FROM messages M
             WHERE M.conversation_id = C.id
             ORDER BY M.id DESC
             LIMIT 1
         ) M2 ON TRUE
         LEFT JOIN conversation_participants MCP
-            ON MCP.id = M2.participant_id
+            ON MCP.id = M2.CREATED_BY
         LEFT JOIN users U
             ON U.id = MCP.user_id
         LEFT JOIN message_attachments MATT
@@ -88,7 +88,7 @@ export async function GetAllByUserID(userId: number) {
             lastMessage: row.message_id ? {
                 id: Number(row.message_id),
                 participant: {
-                    id: Number(row.participant_id),
+                    id: Number(row.created_by),
                     user: {
                         id: Number(row.user_id),
                         name: row.user_name,

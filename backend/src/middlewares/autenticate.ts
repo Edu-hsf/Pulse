@@ -22,7 +22,13 @@ export const Autenticate = (req: Request, res: Response, next: NextFunction) => 
     try {
         const decoded = jwt.verify(token, secretKey);
 
-        req.user = decoded as { id: string, name: string };
+const result = userPayloadSchema.safeParse(decoded);
+
+        if (!result.success) {
+            return res.status(401).json({ error: "Token inválido." });
+        }
+
+        req.user = decoded as unknown as ;
         next();
     } catch (error) {
         console.error(`[${req.method} ${req.originalUrl}]`, error);

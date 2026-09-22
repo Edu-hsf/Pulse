@@ -34,7 +34,7 @@ export async function GetMessagesByConversationID (conversationId: number, limit
                     ATT.URL AS attachment_url
             FROM MESSAGES M
             LEFT JOIN CONVERSATION_PARTICIPANTS CP
-                ON CP.ID = M.PARTICIPANT_ID
+                ON CP.ID = M.CREATED_BY
             LEFT JOIN USERS U
                 ON U.ID = CP.USER_ID
             LEFT JOIN MESSAGE_ATTACHMENTS ATT
@@ -65,7 +65,7 @@ export async function GetMessagesByConversationID (conversationId: number, limit
                     ATT.URL AS attachment_url
             FROM MESSAGES M
             LEFT JOIN CONVERSATION_PARTICIPANTS CP
-                ON CP.ID = M.PARTICIPANT_ID
+                ON CP.ID = M.CREATED_BY
             LEFT JOIN USERS U
                 ON U.ID = CP.USER_ID
             LEFT JOIN MESSAGE_ATTACHMENTS ATT
@@ -78,7 +78,7 @@ export async function GetMessagesByConversationID (conversationId: number, limit
         const message: MessageResponse = {
             id: Number(row.id),
             participant: {
-                id: Number(row.participant_id),
+                id: Number(row.created_by),
                 user: {
                     id: Number(row.user_id),
                     name: row.user_name,

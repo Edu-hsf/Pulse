@@ -1,5 +1,5 @@
 import pool from "../../config/database";
-import { userPayloadSchema, userResponseSchema } from "../../types/user";
+import { userResponseSchema, userWithPasswordSchema } from "../../types/user";
 
 export async function GetByID(id: number) {
     const result = await pool.query(`
@@ -21,7 +21,7 @@ export async function GetByID(id: number) {
 export async function GetByEmail(email: string) {
     const result = await pool.query(`
         SELECT 
-            ID AS sub,
+            ID AS id,
             NAME AS name,
             DELETED_AT AS "deletedAt",
             PASSWORD_HASH AS "passwordHash"
@@ -33,5 +33,5 @@ export async function GetByEmail(email: string) {
 
     const user = result.rows[0];
 
-    return user ? userPayloadSchema.parse(user) : null;
+    return user ? userWithPasswordSchema.parse(user) : null;
 }

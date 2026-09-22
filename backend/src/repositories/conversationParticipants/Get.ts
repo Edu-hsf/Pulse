@@ -5,7 +5,7 @@ import { conversationParticipantResponseSchema } from "../../types/conversationP
 export async function GetByID(id: number) {
     const result = await pool.query(`
             SELECT
-                U.DELETED_AT AS "deletedAt" 
+                CP.USER_ID AS "userId", U.DELETED_AT AS "deletedAt" 
             FROM CONVERSATION_PARTICIPANTS CP
             INNER JOIN USERS U
                 ON U.ID = CP.USER_ID

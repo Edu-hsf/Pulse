@@ -7,14 +7,14 @@ export const LoginWithEmailAndPassword = async (req: Request<{}, {}, { email: st
   const { email, password } = req.body;
 
   try {
-    const { sub, name } = await AuthService.LoginWithEmailAndPassword(email, password);
+    const { id, name } = await AuthService.LoginWithEmailAndPassword(email, password);
     const secretKey = process.env.TOKEN_SECRET_KEY;
 
     if (!secretKey) {
       throw new Error('Chave secreta para assinatura do JWT não configurada.')
     }
 
-    const token = jwt.sign({ sub, name }, secretKey, {
+    const token = jwt.sign({ sub: id, name }, secretKey, {
       expiresIn: '1d',
       algorithm: "HS256",
     })
