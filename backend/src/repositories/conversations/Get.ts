@@ -81,8 +81,7 @@ export async function GetAllByUserID(userId: number) {
         const baseConversation: ConversationPrivateResponse = {
             id: Number(row.id),
             createdAt: row.created_at,
-            createdBy: row.created_by ? Number(row.created_by) : undefined,
-            deletedAt: row.deleted_at ?? null,
+            createdBy: Number(row.created_by),
             unreadMessages: Number(row.unread_messages ?? 0),
             settings: isGroup
                 ? row.conversation_groups_settings
