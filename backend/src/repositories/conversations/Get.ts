@@ -15,7 +15,6 @@ export async function GetAllByUserID(userId: number) {
         `SELECT 
             C.id AS id, 
             C.created_at AS created_at, 
-            C.deleted_at AS deleted_at, 
             C.created_by AS created_by, 
             CASE
                 WHEN CG.id IS NOT NULL THEN TRUE
