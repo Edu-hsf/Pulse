@@ -9,7 +9,7 @@ export async function GetByID(id: number) {
             FROM CONVERSATION_PARTICIPANTS CP
             INNER JOIN USERS U
                 ON U.ID = CP.USER_ID
-            WHERE ID = $1
+            WHERE CP.ID = $1
         `, [id])
 
     return result.rows[0];
