@@ -3,7 +3,7 @@ import * as Update from './Update';
 import * as Delete from './Delete';
 import * as Get from './Get';
 
-export const ConversationsRepository = {
+export const ConversationParticipantsRepository = {
     ...Create,
     ...Update,
     ...Delete,

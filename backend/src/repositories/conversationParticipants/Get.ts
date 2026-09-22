@@ -2,6 +2,12 @@ import { z } from "zod";
 import pool from "../../config/database";
 import { conversationParticipantResponseSchema } from "../../types/conversationParticipant";
 
+export async function ExistsByID(id: number) {
+    const result = await pool.query('SELECT ID FROM CONVERSATION_PARTICIPANTS WHERE ID = $1', [id])
+
+    return result.rows[0] ? true : false;
+}
+
 export async function GetAllByConversationID(conversationId: number) {
     const result = await pool.query(
         `SELECT 
