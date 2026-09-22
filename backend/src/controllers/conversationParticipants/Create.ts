@@ -2,8 +2,8 @@ import { type Request, type Response } from "express";
 import { CreateConversationParticipantDTO } from "../../types/conversationParticipant";
 import { ConversationParticipantsService } from "../../services";
 
-export const Create = async (req: Request<{}, {}, { data: CreateConversationParticipantDTO }>, res: Response) => {
-  const { data }  = req.body;
+export const Create = async (req: Request<{}, {}, CreateConversationParticipantDTO>, res: Response) => {
+  const data  = req.body;
 
   try {
     await ConversationParticipantsService.Create(data);

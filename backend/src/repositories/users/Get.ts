@@ -33,7 +33,5 @@ export async function GetByEmail(email: string) {
 
     const user = result.rows[0];
 
-    console.log(user)
-
     return user ? userPayloadSchema.parse(user) : null;
 }
