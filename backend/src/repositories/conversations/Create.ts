@@ -1,16 +1,44 @@
+import { QueryResult } from "pg";
 import pool from "../../config/database";
+import { ConversationPrivateSettings, ConversationPublicSettings, CreateConversationDTO } from "../../types/conversation";
 
-export async function Create (userId: number) {
+export async function Create (data: CreateConversationDTO) {
     const client = await pool.connect();
 
     try {
         await client.query('BEGIN');
 
-        const conversationResult = await client.query('INSERT INTO CONVERSATIONS DEFAULT VALUES RETURNING id')
+        let conversationResult: QueryResult<any>;
+
+        if ('name' in data) {
+            const settings: ConversationPrivateSettings = {
+                messages: {
+                    disappearingMessagesEnabled: false,
+                    disappearingMessagesDuration: null,
+                }
+            }
+
+            conversationResult = await client.query('INSERT INTO CONVERSATIONS (SETTINGS) VALUES ($1) RETURNING id', [settings])
+        } else {
+            const settings: ConversationPublicSettings = {
+                permissions: {
+                    whoCanSendMessages: 'everyone',
+                    whoCanAddMembers: 'everyone',
+                    whoCanEditGroupConfig: 'admins',
+                    whoCanPinMessages: 'everyone',
+                },
+                messages: {
+                    disappearingMessagesEnabled: false,
+                    disappearingMessagesDuration: null,
+                }
+            }
+
+            conversationResult = await client.query('INSERT INTO CONVERSATIONS (SETTINGS) VALUES ($1) RETURNING id', [settings])
+        }
 
         const conversationId = conversationResult.rows[0].id;
 
-        const participantResult = await client.query(`INSERT INTO CONVERSATION_PARTICIPANTS (USER_ID, CONVERSATION_ID, ROLE) VALUES ($1, $2, 'super_admin') RETURNING id`, [userId, conversationId]);
+        const participantResult = await client.query(`INSERT INTO CONVERSATION_PARTICIPANTS (USER_ID, CONVERSATION_ID, ROLE) VALUES ($1, $2, 'super_admin') RETURNING id`, [data.createdBy, conversationId]);
 
         const participantId = participantResult.rows[0].id;
 
@@ -23,6 +51,4 @@ export async function Create (userId: number) {
     } finally {
         client.release();
     }
-
-    return 
 }

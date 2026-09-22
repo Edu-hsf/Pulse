@@ -3,8 +3,8 @@ import { ConversationsService } from "../../services";
 import { UpdateConversationDTO } from "../../types/conversation";
 
 export const Update = async (req: Request<{ id: number }, {}, UpdateConversationDTO>, res: Response) => {
-  const data = req.body;
   const { id } = req.params;
+  const data = req.body;
 
   try {
     await ConversationsService.update(Number(id), data)

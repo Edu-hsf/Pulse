@@ -1,21 +1,59 @@
 import pool from "../../config/database";
 import { UpdateConversationDTO } from "../../types/conversation";
 
-export async function Update(id: number, data: UpdateConversationDTO) {
-  const updates = [];
-  const values = [];
+export async function Update(
+  id: number,
+  data: UpdateConversationDTO,
+) {
+  const updates: string[] = [];
+  const values: unknown[] = [id];
 
-  values.push(id);
+  if ("name" in data) {
+    if (data.name !== undefined) {
+      updates.push(`name = $${values.length + 1}`);
+      values.push(data.name);
+    }
 
-  let index = 1;
+    if (data.description !== undefined) {
+      updates.push(`description = $${values.length + 1}`);
+      values.push(data.description);
+    }
 
-  if (data.deletedAt !== undefined) {
-    updates.push("DELETED_AT = $" + ++index);
-    values.push(data.deletedAt);
+    if (data.avatar !== undefined) {
+      updates.push(`avatar = $${values.length + 1}`);
+      values.push(data.avatar);
+    }
+
+    if (data.settings !== undefined) {
+      updates.push(`settings = $${values.length + 1}`);
+      values.push(data.settings);
+    }
+
+    if (updates.length === 0) {
+      return;
+    }
+
+    return pool.query(
+      `
+      UPDATE conversation_groups
+      SET ${updates.join(", ")}
+      WHERE id = $1
+      `,
+      values,
+    );
+  }
+
+  if (data.settings !== undefined) {
+    updates.push(`settings = $${values.length + 1}`);
+    values.push(data.settings);
   }
 
   return pool.query(
-    `UPDATE CONVERSATIONS SET ${updates.join(", ")} WHERE ID = $1`,
+    `
+    UPDATE conversation_privates
+    SET ${updates.join(", ")}
+    WHERE id = $1
+    `,
     values,
   );
 }
