@@ -18,6 +18,11 @@ export async function Create (data: CreateMessageDTO) {
         if (data.attachment) {  
             await client.query(`INSERT INTO MESSAGE_ATTACHMENTS (MESSAGE_ID, TYPE, URL) VALUES ($1, $2, $3)`, [messageId, data.attachment.type, data.attachment.url]);
         }
+
+        await client.query(`
+            UPDATE CONVERSATION_PARTICIPANTS
+            SET LAST_READ_MESSAGE_ID = $1
+            WHERE ID = $2`, [messageId, data.participantId])
         
         await client.query('COMMIT');
 
