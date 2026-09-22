@@ -10,6 +10,9 @@ export async function Create (data: CreateConversationDTO) {
 
         let conversationResult: QueryResult<any>;
 
+        conversationResult = await client.query('INSERT INTO CONVERSATIONS DEFAULT VALUES RETURNING id')
+        const conversationId = conversationResult.rows[0].id;
+
         if ('name' in data) {
             const settings: ConversationPrivateSettings = {
                 messages: {
@@ -18,7 +21,8 @@ export async function Create (data: CreateConversationDTO) {
                 }
             }
 
-            conversationResult = await client.query('INSERT INTO CONVERSATIONS (SETTINGS) VALUES ($1) RETURNING id', [settings])
+            await client.query('INSERT INTO CONVERSATION_GROUPS (CONVERSATION_ID, NAME, DESCRIPTION, AVATAR, SETTINGS) VALUES ($1, $2, $3, $4, $5)', [conversationId, data.name, data.description, data.avatar, settings])
+            
         } else {
             const settings: ConversationPublicSettings = {
                 permissions: {
@@ -33,10 +37,8 @@ export async function Create (data: CreateConversationDTO) {
                 }
             }
 
-            conversationResult = await client.query('INSERT INTO CONVERSATIONS (SETTINGS) VALUES ($1) RETURNING id', [settings])
+            await client.query('INSERT INTO CONVERSATION_PRIVATES (CONVERSATION_ID, SETTINGS) VALUES ($1, $2)', [conversationId, settings])
         }
-
-        const conversationId = conversationResult.rows[0].id;
 
         const participantOwnerResult = await client.query(`INSERT INTO CONVERSATION_PARTICIPANTS (USER_ID, CONVERSATION_ID, ROLE) VALUES ($1, $2, 'super_admin') RETURNING id`, [data.createdBy, conversationId]);
 
