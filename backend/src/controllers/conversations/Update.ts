@@ -9,9 +9,9 @@ export const Update = async (req: Request<{ id: number }, {}, UpdateConversation
   try {
     await ConversationsService.update(Number(id), data)
 
-    res.status(200).json({ message: "Administrador da conversa alterado com sucesso!" });
+    res.status(200).json({ message: "Conversa alterada com sucesso!" });
   } catch (error) {
     console.error(`[${req.method} ${req.originalUrl}]`, error);
-    res.status(500).json({ error: "Erro ao alterar administrador da conversa." });
+    res.status(500).json({ error: "Erro ao alterar Conversa." });
   }
 }
