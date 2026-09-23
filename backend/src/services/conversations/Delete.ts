@@ -2,7 +2,7 @@ import { ConversationsRepository } from "../../repositories";
 
 export async function Delete(id: number) {
   if (id <= 0) {
-    throw new Error("ID inválido.");
+    throw new Error('O campo "ID" deve ser maior que 0.');
   }
 
   const conversation = await ConversationsRepository.ExistsByID(id);

@@ -2,7 +2,7 @@ import { ConversationParticipantsRepository, ConversationsRepository } from '../
 
 export async function GetAllByConversationID(conversationId: number) {
   if (conversationId <= 0) {
-    throw new Error('ID da conversa inválido.');
+    throw new Error('O campo "conversationId" deve ser maior que 0.');
   }
 
   const conversationExists = await ConversationsRepository.ExistsByID(conversationId);

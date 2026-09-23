@@ -3,7 +3,7 @@ import { UpdateConversationDTO } from "../../types/conversation";
 
 export async function update(id: number, data: UpdateConversationDTO) {
   if (id <= 0) {
-    throw new Error("ID inválido.");
+    throw new Error('O campo "ID" deve ser maior que 0.');
   }
 
   if (Object.keys(data).length === 0) {

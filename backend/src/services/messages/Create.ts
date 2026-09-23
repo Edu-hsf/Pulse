@@ -1,15 +1,7 @@
 import { ConversationParticipantsRepository, MessagesRepository } from "../../repositories";
 import { CreateMessageDTO } from "../../types/message";
 
-export async function Create(authUserId: number, data: CreateMessageDTO) {
-  if (data.createdBy <= 0) {
-    throw new Error("ID do participante inválido.");
-  }
-
-  if (data.conversationId <= 0) {
-    throw new Error("ID da conversa inválido.");
-  }
-  
+export async function Create(authUserId: number, data: CreateMessageDTO) {  
   const participant = await ConversationParticipantsRepository.GetByID(data.createdBy);
 
   if (!participant || participant.deletedAt) {

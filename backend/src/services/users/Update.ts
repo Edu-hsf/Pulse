@@ -4,7 +4,7 @@ import argon2 from "argon2";
 
 export async function update(id: number, data: UpdateUserDTO) {
   if (id <= 0) {
-    throw new Error("ID inválido.");
+    throw new Error('O campo "ID" deve ser maior que 0.');
   }
 
   if (Object.keys(data).length === 0) {
