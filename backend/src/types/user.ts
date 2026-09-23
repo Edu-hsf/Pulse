@@ -31,7 +31,7 @@ export const userWithPasswordSchema = z.object({
 })
 
 export const userPayloadSchema = z.object({
-  id: z.number(),
+  sub: z.number(),
   name: z.string(),
 })
 
@@ -39,3 +39,4 @@ export type UserResponse = z.infer<typeof userResponseSchema>;
 export type UserWithPassword = z.infer<typeof userWithPasswordSchema>;
 export type CreateUserDTO = z.infer<typeof createUserSchema>;
 export type UpdateUserDTO = z.infer<typeof updateUserSchema>;
+export type UserPayload = z.infer<typeof userPayloadSchema>;

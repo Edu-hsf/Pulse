@@ -1,6 +1,7 @@
 import { type Request, type Response, type NextFunction } from "express";
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
+import { userPayloadSchema } from "../types/user";
 
 export const Autenticate = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
@@ -22,13 +23,13 @@ export const Autenticate = (req: Request, res: Response, next: NextFunction) => 
     try {
         const decoded = jwt.verify(token, secretKey);
 
-const result = userPayloadSchema.safeParse(decoded);
+        const result = userPayloadSchema.safeParse(decoded);
 
         if (!result.success) {
             return res.status(401).json({ error: "Token inválido." });
         }
 
-        req.user = decoded as unknown as ;
+        req.user = result.data;
         next();
     } catch (error) {
         console.error(`[${req.method} ${req.originalUrl}]`, error);
