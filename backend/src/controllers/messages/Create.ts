@@ -7,8 +7,6 @@ export const Create = async (req: Request<{}, {}, CreateMessageDTO>, res: Respon
   try {
     const data = createMessageSchema.parse(req.body);
 
-    console.log(req.user)
-
     await MessagesService.Create(Number(req.user?.sub), data);
 
     res.status(201).json({ message: "Mensagem criada com sucesso!" });

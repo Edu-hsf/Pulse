@@ -10,6 +10,20 @@ export async function ExistsByID(id: number) {
     return conversation ? true : false;
 }
 
+export async function GetConversationByUserIdAndConversationId(userId: number, conversationId: number) {
+    const result = await pool.query(`
+        SELECT 
+            C.ID 
+        FROM CONVERSATIONS C 
+        INNER JOIN CONVERSATION_PARTICIPANTS CP
+            ON CP.conversation_id = C.ID
+            AND CP.LEFT_AT IS NOT NULL
+        WHERE CP.USER_iD = 36106 AND C.ID = 100
+    `, [userId, conversationId])
+
+    return result.rows[0];
+}
+
 export async function GetAllByUserID(userId: number) {
     const result = await pool.query(
         `SELECT 

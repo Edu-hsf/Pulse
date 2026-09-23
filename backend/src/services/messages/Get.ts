@@ -1,6 +1,6 @@
 import { ConversationsRepository, MessagesRepository } from '../../repositories/';
 
-export async function GetMessagesByConversationID(conversationId: number, limit: number, cursor?: number) {
+export async function GetMessagesByConversationID(authUserId: number, conversationId: number, limit: number, cursor?: number) {
   if (conversationId <= 0) {
     throw new Error('ID da conversa inválido.');
   }
@@ -13,10 +13,10 @@ export async function GetMessagesByConversationID(conversationId: number, limit:
     throw new Error('Cursor inválido.');
   }
 
-  const conversation = await ConversationsRepository.ExistsByID(conversationId);
+  const conversationExists = await ConversationsRepository.GetMessagesByUserIdAndConversationId(authUserId, conversationId);
 
-  if (!conversation) {
-    throw new Error('A conversa informada não existe.');
+  if (!conversationExists) {
+    throw new Error('Não é possível listar mensagens de uma conversa a qual o usuário não participa.')
   }
 
   const messages = await MessagesRepository.GetMessagesByConversationID(conversationId, limit, cursor);

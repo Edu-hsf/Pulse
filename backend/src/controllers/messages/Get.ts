@@ -11,7 +11,7 @@ export const GetMessagesByConversationID = async (req: Request<GetMessagesByConv
   const { conversationId, limit, cursor } = req.params
 
   try {
-    const messages = await MessagesService.GetMessagesByConversationID(Number(conversationId), limit, cursor);
+    const messages = await MessagesService.GetMessagesByConversationID(Number(req.user?.sub), Number(conversationId), limit, cursor);
 
     res.status(200).json(messages);
   } catch (error) {

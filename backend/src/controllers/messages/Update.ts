@@ -7,7 +7,7 @@ export const Update = async (req: Request<{ id: number }, {}, UpdateMessageDTO>,
   const { id } = req.params;
 
   try {
-    await MessagesService.update(Number(id), data)
+    await MessagesService.update(Number(req.user?.sub), Number(id), data)
 
     res.status(200).json({ message: "Mensagem alterada com sucesso!" });
   } catch (error) {

@@ -6,7 +6,7 @@ export const Create = async (req: Request<{}, {}, CreateConversationDTO>, res: R
   const data  = req.body;
 
   try {
-    await ConversationsService.Create(data);
+    await ConversationsService.Create(Number(req.user?.sub), data);
 
     res.status(201).json({ message: "Conversa criada com sucesso!" });
   } catch (error) {

@@ -2,7 +2,7 @@
 import { MessagesRepository } from "../../repositories";
 import { UpdateMessageDTO } from "../../types/message";
 
-export async function update(id: number, data: UpdateMessageDTO) {
+export async function update(authUserId: number, id: number, data: UpdateMessageDTO) {
   if (id <= 0) {
     throw new Error('O campo "ID" deve ser maior que 0.');
   }
@@ -11,10 +11,10 @@ export async function update(id: number, data: UpdateMessageDTO) {
     throw new Error("Nenhum campo informado.");
   }
 
-  const message = await MessagesRepository.ExistsByID(id);
+  const message = await MessagesRepository.ExistsByUserIdAndMessageId(authUserId, id);
 
   if (!message) {
-    throw new Error("Mensagem não encontrada.");
+    throw new Error('Não é possível alterar uma mensagem que não pertence ao usuário.');
   }
 
   await MessagesRepository.Update(id, data);

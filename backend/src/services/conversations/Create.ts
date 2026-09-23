@@ -1,16 +1,27 @@
 import { ConversationsRepository, UsersRepository } from "../../repositories";
 import { CreateConversationDTO } from "../../types/conversation";
 
-export async function Create(data: CreateConversationDTO) {
+export async function Create(authUserId: number, data: CreateConversationDTO) {
   const user = await UsersRepository.GetByID(data.createdBy);
 
   if (!user || user.deletedAt) {
     throw new Error("O usuário informado não existe ou está desativado.");
   }
 
+  if (authUserId !== data.createdBy) {
+    throw new Error("Não é permitido criar uma conversa em nome de outro usuário.")
+  }
+
   if ("participantUserIds" in data) {
+    const idsSet = new Set(data.participantUserIds);
+    
+
+    if (idsSet.size !== data.participantUserIds.length) {
+      throw new Error('Não pode haver IDs repetidos.')
+    }
+
     for (const userId of data.participantUserIds) {
-      const participantUser = await UsersRepository.GetByID(Number(userId));
+      const participantUser = await UsersRepository.GetByID(userId);
 
       if (!participantUser || participantUser.deletedAt) {
         throw new Error(
@@ -20,7 +31,7 @@ export async function Create(data: CreateConversationDTO) {
     }
   } else {
     const participantUser = await UsersRepository.GetByID(
-      Number(data.participantUserId),
+      data.participantUserId,
     );
 
     if (!participantUser || participantUser.deletedAt) {

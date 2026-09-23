@@ -9,6 +9,21 @@ export async function ExistsByID(id: number) {
     return message ? true : false
 }
 
+export async function GetMessageByUserIdAndMessageId(userId: number, messageId: number) {
+    const result = await pool.query(`
+        SELECT 
+            M.ID 
+        FROM MESSAGES M
+        INNER JOIN CONVERSATION_PARTICIPANTS CP
+            ON CP.ID = M.CREATED_BY
+            AND CP.
+        WHERE CP.USER_ID = $1 AND M.ID = $2`, [userId, messageId]);
+
+    const message = result.rows[0]
+
+    return message ? true : false
+}
+
 export async function GetMessagesByConversationID (conversationId: number, limit: number, cursor?: number) {
     const result = cursor ? 
         await pool.query(`
@@ -100,7 +115,7 @@ export async function GetMessagesByConversationID (conversationId: number, limit
                 id: Number(row.attachment_id),
                 type: row.attachment_type,
                 url: row.attachment_url,
-            } : undefined,
+            } : null,
         }
 
         return message;
