@@ -6,14 +6,6 @@ import {
 import { CreateConversationParticipantDTO } from "../../types/conversationParticipant";
 
 export async function Create(data: CreateConversationParticipantDTO) {
-  if (data.userId <= 0) {
-    throw new Error("ID do usuário inválido.");
-  }
-
-  if (data.conversationId <= 0) {
-    throw new Error("ID da conversa inválido.");
-  }
-
   const user = await UsersRepository.GetByID(data.userId);
 
   if (!user || user.deletedAt) {

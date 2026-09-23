@@ -8,7 +8,7 @@ export const conversationPrivateSettingsSchema = z.object({
   })
 })
 
-export const conversationPublicSettingsSchema = z.object({
+export const conversationGroupSettingsSchema = z.object({
   permissions: z.object({
     whoCanSendMessages: z.enum(['everyone', 'admins']),
     whoCanAddMembers: z.enum(['everyone', 'admins']),
@@ -39,7 +39,7 @@ export const conversationGroupResponseSchema = z.object({
     name: z.string(),
     description: z.string().nullable(),
     avatar: z.url().nullable(),
-    settings: conversationPublicSettingsSchema,
+    settings: conversationGroupSettingsSchema,
 });
 
 export const conversationResponseSchema = z.union([
@@ -49,12 +49,12 @@ export const conversationResponseSchema = z.union([
 
 export const createConversationPrivateSchema = z.object({
   createdBy: z.number('O campo "createdBy" deve ser um número.').positive('O campo "createdBy" deve ser maior que 0'),
-  participantUserId: z.number('O campo "participantUserId" deve ser um número.').positive('O campo "participantsUserId" deve ser maior que 0'),
+  participantUserId: z.number('O campo "participantUserId" deve ser um número.').positive('O campo "participantUserIds" deve ser maior que 0'),
 }).strict();
 
 export const createConversationGroupSchema = z.object({
   createdBy: z.number('O campo "createdBy" deve ser um número.').positive('O campo "createdBy" deve ser maior que 0'),
-  participantsUserId: z.array(z.number('O campo "participantUserId" deve ser um número.').positive('O campo "participantsUserId" deve ser maior que 0')).min(1, 'Deve haver no mínimo 1 participante na conversa.'),
+  participantUserIds: z.array(z.number('O campo "participantUserIds" deve ser um número.').positive('O campo "participantUserIds" deve ser maior que 0')).min(1, 'Deve haver no mínimo 1 participante na conversa.'),
   name: z.string('O campo "name" deve ser uma string.').trim().min(2, 'O campo "name" deve ter no mínimo 2 caracteres.'),
   description: z.string('O campo "description" deve ser uma string.').trim().min(2, 'O campo "description" deve ter no mínimo 1 caracter.').nullable(),
   avatar: z.url('O campo "URL" deve ser um URL válido.').nullable(),
@@ -103,4 +103,4 @@ export type ConversationResponse = z.infer<typeof conversationResponseSchema>;
 export type UpdateConversationDTO = z.infer<typeof updateConversationSchema>;
 export type CreateConversationDTO = z.infer<typeof createConversationSchema>;
 export type ConversationPrivateSettings = z.infer<typeof conversationPrivateSettingsSchema>;
-export type ConversationPublicSettings = z.infer<typeof conversationPublicSettingsSchema>;
+export type ConversationGroupSettings = z.infer<typeof conversationGroupSettingsSchema>;

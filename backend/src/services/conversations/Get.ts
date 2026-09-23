@@ -2,7 +2,7 @@ import { ConversationsRepository, UsersRepository } from '../../repositories/';
 
 export async function GetAllByUserID(userId: number) {
   if (userId <= 0) {
-    throw new Error('ID do usuário inválido.');
+    throw new Error('O campo "UserId" deve ser maior que 0.');
   }
 
   const user = await UsersRepository.GetByID(userId);

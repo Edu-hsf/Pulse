@@ -12,12 +12,8 @@ export async function Create(data: CreateConversationDTO) {
     throw new Error("O usuário informado não existe ou está desativado.");
   }
 
-  if ("participantsUserId" in data) {
-    for (const userId in data.participantsUserId) {
-      if (Number(userId) <= 0) {
-        throw new Error(`Um participante tem o ID inválido. (ID: ${userId})`);
-      }
-
+  if ("participantUserIds" in data) {
+    for (const userId of data.participantUserIds) {
       const participantUser = await UsersRepository.GetByID(Number(userId));
 
       if (!participantUser || participantUser.deletedAt) {
@@ -27,10 +23,6 @@ export async function Create(data: CreateConversationDTO) {
       }
     }
   } else {
-    if (data.participantUserId <= 0) {
-      throw new Error("ID do participante inválido.");
-    }
-
     const participantUser = await UsersRepository.GetByID(
       Number(data.participantUserId),
     );
