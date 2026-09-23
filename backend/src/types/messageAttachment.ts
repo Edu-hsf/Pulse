@@ -7,8 +7,8 @@ export const messageAttachmentResponseSchema = z.object({
 })
 
 export const createMessageAttachmentSchema = z.object({
-    type: z.enum(['image', 'audio', 'video', 'file']),
-    url: z.string(),
+    type: z.enum(['image', 'audio', 'video', 'file'], 'Tipo de anexo inválido.'),
+    url: z.url('O campo "URL" deve ser um URL válido.').trim().min(1, 'O campo "URL" é obrigatório.').max(2048, 'O tamanho da URL não pode ultrapassar 2048 caracteres.'),
 }).strict();
 
 export type MessageAttachmentResponse = z.infer<typeof messageAttachmentResponseSchema>;

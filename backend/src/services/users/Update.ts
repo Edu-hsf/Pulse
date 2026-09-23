@@ -17,8 +17,8 @@ export async function update(id: number, data: UpdateUserDTO) {
     throw new Error("Usuário não encontrado.");
   }
 
-  if (data.passwordHash !== undefined) {
-    data.passwordHash = await argon2.hash(data.passwordHash, {
+  if (data.password !== undefined) {
+    data.password = await argon2.hash(data.password, {
       type: argon2.argon2id
     })
   }

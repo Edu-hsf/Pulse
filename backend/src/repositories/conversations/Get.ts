@@ -99,19 +99,19 @@ export async function GetAllByUserID(userId: number) {
                     },
                     role: row.participant_role,
                     joinedAt: new Date(row.participant_joined_at),
-                    leftAt: row.participant_left_at ? row.participant_left_at : undefined,
-                    addBy: row.participant_add_by ? Number(row.participant_add_by) : undefined,
-                    removedBy: row.participant_removed_by ? Number(row.participant_removed_by) : undefined,
+                    leftAt: row.participant_left_at,
+                    addBy: row.participant_add_by ? Number(row.participant_add_by) : null,
+                    removedBy: row.participant_removed_by ? Number(row.participant_removed_by) : null,
                 },
                 content: row.message_content,
                 createdAt: row.message_created_at,
-                deletedAt: row.message_deleted_at ? row.message_deleted_at : undefined,
+                deletedAt: row.message_deleted_at ? new Date(row.message_deleted_at) : null,
                 attachment: row.attachment_id ? {
                     id: Number(row.attachment_id),
                     type: row.attachment_type,
                     url: row.attachment_url,
-                } : undefined,      
-            } : undefined,
+                } : null,      
+            } : null,
         }
 
         if (isGroup) {

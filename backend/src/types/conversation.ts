@@ -27,7 +27,7 @@ export const conversationPrivateResponseSchema = z.object({
     createdBy: z.number(),
     settings: conversationPrivateSettingsSchema,
     unreadMessages: z.number(),
-    lastMessage: messageResponseSchema.optional(),
+    lastMessage: messageResponseSchema.nullable(),
 });
 
 export const conversationGroupResponseSchema = z.object({
@@ -35,10 +35,10 @@ export const conversationGroupResponseSchema = z.object({
     createdAt: z.coerce.date(),
     createdBy: z.number(),
     unreadMessages: z.number(),
-    lastMessage: messageResponseSchema.optional(),
+    lastMessage: messageResponseSchema.nullable(),
     name: z.string(),
-    description: z.string().optional(),
-    avatar: z.string().optional(),
+    description: z.string().nullable(),
+    avatar: z.url().nullable(),
     settings: conversationPublicSettingsSchema,
 });
 
@@ -48,16 +48,16 @@ export const conversationResponseSchema = z.union([
 ]);
 
 export const createConversationPrivateSchema = z.object({
-  createdBy: z.number(),
-  participantUserId: z.number(),
+  createdBy: z.number('O campo "createdBy" deve ser um número.').positive('O campo "createdBy" deve ser maior que 0'),
+  participantUserId: z.number('O campo "participantUserId" deve ser um número.').positive('O campo "participantsUserId" deve ser maior que 0'),
 }).strict();
 
 export const createConversationGroupSchema = z.object({
-  createdBy: z.number(),
-  participantsUserId: z.array(z.number()).min(1),
-  name: z.string(),
-  description: z.string().optional(),
-  avatar: z.string().optional(),
+  createdBy: z.number('O campo "createdBy" deve ser um número.').positive('O campo "createdBy" deve ser maior que 0'),
+  participantsUserId: z.array(z.number('O campo "participantUserId" deve ser um número.').positive('O campo "participantsUserId" deve ser maior que 0')).min(1, 'Deve haver no mínimo 1 participante na conversa.'),
+  name: z.string('O campo "name" deve ser uma string.').trim().min(2, 'O campo "name" deve ter no mínimo 2 caracteres.'),
+  description: z.string('O campo "description" deve ser uma string.').trim().min(2, 'O campo "description" deve ter no mínimo 1 caracter.').nullable(),
+  avatar: z.url('O campo "URL" deve ser um URL válido.').nullable(),
 }).strict();
 
 export const createConversationSchema = z.union([
@@ -68,26 +68,26 @@ export const createConversationSchema = z.union([
 export const updateConversationPrivateSchema = z.object({
   settings: z.object({
     messages: z.object({
-      disappearingMessagesEnabled: z.boolean().default(false),
-      disappearingMessagesDuration: z.number().nullable().default(null),
+      disappearingMessagesEnabled: z.boolean('O campo "disappearingMessagesEnabled" do objeto "messages" deve ser um boolean.'),
+      disappearingMessagesDuration: z.number('O campo "disappearingMessagesDuration" deve ser um número.').nullable(),
     })
   }),
 }).strict();
 
 export const updateConversationGroupSchema = z.object({
-  name: z.string().optional(),
-  description: z.string().optional(),
-  avatar: z.string().optional(),
+  name: z.string('O campo "name" deve ser uma string.').trim().min(2, 'O campo "name" deve ter no mínimo 2 caracteres.').optional(),
+  description: z.string('O campo "description" deve ser uma string.').trim().min(2, 'O campo "description" deve ter no mínimo 1 caracter.').nullish(),
+  avatar: z.url('O campo "URL" deve ser um URL válido.').nullish(),
   settings: z.object({
     permissions: z.object({
-      whoCanSendMessages: z.enum(['everyone', 'admins']).default('everyone'),
-      whoCanAddMembers: z.enum(['everyone', 'admins']).default('everyone'),
-      whoCanEditGroupConfig: z.enum(['everyone', 'admins']).default('everyone'),
-      whoCanPinMessages: z.enum(['everyone', 'admins']).default('everyone'),
+      whoCanSendMessages: z.enum(['everyone', 'admins'], 'O campo "whoCanSendMessages" do objeto "permissions" deve ser uma string do tipo "everyone" ou "admins".'),
+      whoCanAddMembers: z.enum(['everyone', 'admins'], 'O campo "whoCanAddMembers" do objeto "permissions" deve ser uma string do tipo "everyone" ou "admins".'),
+      whoCanEditGroupConfig: z.enum(['everyone', 'admins'], 'O campo "whoCanEditGroupConfig" do objeto "permissions" deve ser uma string do tipo "everyone" ou "admins".'),
+      whoCanPinMessages: z.enum(['everyone', 'admins'], 'O campo "whoCanPinMessages" do objeto "permissions" deve ser uma string do tipo "everyone" ou "admins".'),
     }),
     messages: z.object({
-      disappearingMessagesEnabled: z.boolean().default(false),
-      disappearingMessagesDuration: z.number().nullable().default(null),
+      disappearingMessagesEnabled: z.boolean('O campo "disappearingMessagesEnabled" do objeto "messages" deve ser um boolean.'),
+      disappearingMessagesDuration: z.number('O campo "disappearingMessagesDuration" do objeto "messages" deve ser um número.').nullable(),
     }),
   }).optional(),
 }).strict();

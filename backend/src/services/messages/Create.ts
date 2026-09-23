@@ -9,14 +9,6 @@ export async function Create(authUserId: number, data: CreateMessageDTO) {
   if (data.conversationId <= 0) {
     throw new Error("ID da conversa inválido.");
   }
-
-  if (!data.content && !data.attachment) {
-    throw new Error("A mensagem deve ter ao menos um texto ou um anexo.");
-  }
-
-  if (data.content && !data.content.trim()) {
-    throw new Error("O conteúdo da mensagem não pode estar vazio.");
-  }
   
   const participant = await ConversationParticipantsRepository.GetByID(data.createdBy);
 
