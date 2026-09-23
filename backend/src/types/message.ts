@@ -12,15 +12,15 @@ export const messageResponseSchema = z.object({
 });
 
 export const createMessageSchema = z.object({
-  createdBy: z.number(),
-  conversationId: z.number(),
-  content: z.string().optional(),
+  createdBy: z.number('O campo "createdAt" deve ser um número.'),
+  conversationId: z.number('O campo "conversationId" deve ser um número.'),
+  content: z.string('O campo "content" deve ser uma string.').max(4096, 'A mensagem deve ter no máximo 4096 caracteres.').optional(),
   attachment: createMessageAttachmentSchema.optional(),
 }).strict();
 
 export const updateMessageSchema = z.object({
-  content: z.string().optional(),
-  deletedAt: z.coerce.date().optional(),
+  content: z.string('O campo "content" deve ser uma string.').max(4096, 'A mensagem deve ter no máximo 4096 caracteres.').optional(),
+  deletedAt: z.coerce.date('O campo "deletedAt" deve ser uma data.').optional(),
 }).strict();
 
 export type MessageResponse = z.infer<typeof messageResponseSchema>;
