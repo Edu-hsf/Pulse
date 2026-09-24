@@ -24,9 +24,9 @@ export async function Update(id: number, data: UpdateUserDTO) {
     values.push(data.avatar);
   }
 
-  if (data.passwordHash !== undefined) {
+  if (data.password !== undefined) {
     updates.push("PASSWORD_HASH = $" + ++index);
-    values.push(data.passwordHash);
+    values.push(data.password);
   }
 
   if (data.deletedAt !== undefined) {

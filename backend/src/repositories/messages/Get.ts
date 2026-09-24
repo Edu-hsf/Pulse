@@ -16,7 +16,7 @@ export async function GetMessageByUserIdAndMessageId(userId: number, messageId: 
         FROM MESSAGES M
         INNER JOIN CONVERSATION_PARTICIPANTS CP
             ON CP.ID = M.CREATED_BY
-            AND CP.
+            AND CP.LEFT_AT IS NOT NULL
         WHERE CP.USER_ID = $1 AND M.ID = $2`, [userId, messageId]);
 
     const message = result.rows[0]

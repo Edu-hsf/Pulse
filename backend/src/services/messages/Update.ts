@@ -11,7 +11,7 @@ export async function update(authUserId: number, id: number, data: UpdateMessage
     throw new Error("Nenhum campo informado.");
   }
 
-  const message = await MessagesRepository.ExistsByUserIdAndMessageId(authUserId, id);
+  const message = await MessagesRepository.GetMessageByUserIdAndMessageId(authUserId, id);
 
   if (!message) {
     throw new Error('Não é possível alterar uma mensagem que não pertence ao usuário.');

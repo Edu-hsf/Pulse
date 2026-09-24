@@ -13,9 +13,9 @@ export async function GetMessagesByConversationID(authUserId: number, conversati
     throw new Error('Cursor inválido.');
   }
 
-  const conversationExists = await ConversationsRepository.GetMessagesByUserIdAndConversationId(authUserId, conversationId);
+  const conversation = await ConversationsRepository.GetConversationByUserIdAndConversationId(authUserId, conversationId);
 
-  if (!conversationExists) {
+  if (!conversation) {
     throw new Error('Não é possível listar mensagens de uma conversa a qual o usuário não participa.')
   }
 
