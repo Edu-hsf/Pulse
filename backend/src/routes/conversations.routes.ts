@@ -7,8 +7,6 @@ conversationsRouter.post("/", ConversationsController.Create);
 
 conversationsRouter.patch("/:id", ConversationsController.Update);
 
-conversationsRouter.delete('/:id', ConversationsController.Delete)
-
 conversationsRouter.get('/user/:userId', ConversationsController.GetAllByUserID)
 
 export { conversationsRouter };

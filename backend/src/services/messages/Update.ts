@@ -17,5 +17,9 @@ export async function update(authUserId: number, id: number, data: UpdateMessage
     throw new Error('Não é possível alterar uma mensagem que não pertence ao usuário.');
   }
 
+  if (message.deletedAt) {
+    throw new Error('Não é possível alterar uma mensagem apagada.');
+  }
+
   await MessagesRepository.Update(id, data);
 }

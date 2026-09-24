@@ -7,8 +7,6 @@ conversationParticipantsRouter.post("/", ConversationParticipantsController.Crea
 
 conversationParticipantsRouter.patch("/:id", ConversationParticipantsController.Update);
 
-conversationParticipantsRouter.delete('/:id', ConversationParticipantsController.Delete)
-
 conversationParticipantsRouter.get('/conversation/:conversationId', ConversationParticipantsController.GetAllByConversationID)
 
 export { conversationParticipantsRouter };
