@@ -13,15 +13,14 @@ export async function GetMessageByUserIdAndMessageId(userId: number, messageId: 
     const result = await pool.query(`
         SELECT 
             M.ID 
+            M.DELETED_AT AS "deletedAt"
         FROM MESSAGES M
         INNER JOIN CONVERSATION_PARTICIPANTS CP
             ON CP.ID = M.CREATED_BY
             AND CP.LEFT_AT IS NOT NULL
         WHERE CP.USER_ID = $1 AND M.ID = $2`, [userId, messageId]);
 
-    const message = result.rows[0]
-
-    return message ? true : false
+    return result.rows[0];
 }
 
 export async function GetMessagesByConversationID (conversationId: number, limit: number, cursor?: number) {
@@ -41,7 +40,10 @@ export async function GetMessagesByConversationID (conversationId: number, limit
                     CP.ADD_BY AS participant_add_by,
                     CP.REMOVED_BY AS participant_removed_at,
                     CP.ROLE AS participant_role,
-                M.CONTENT AS content,
+                CASE
+                    WHEN M.DELETED_AT IS NOT NULL THEN NULL
+                    ELSE M.CONTENT
+                END AS content,
                 M.CREATED_AT AS created_at,
                 M.DELETED_AT AS deleted_at,
                     ATT.ID AS attachment_id,
