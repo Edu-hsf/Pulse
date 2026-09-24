@@ -16,7 +16,7 @@ export async function GetMessagesByConversationID(authUserId: number, conversati
   const conversation = await ConversationsRepository.GetConversationByUserIdAndConversationId(authUserId, conversationId);
 
   if (!conversation) {
-    throw new Error('Não é possível listar mensagens de uma conversa a qual o usuário não participa.')
+    throw new Error('Não é possível listar mensagens de uma conversa da qual o usuário não participa.')
   }
 
   const messages = await MessagesRepository.GetMessagesByConversationID(conversationId, limit, cursor);
