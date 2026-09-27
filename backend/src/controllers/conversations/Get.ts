@@ -5,7 +5,7 @@ export const GetAllByUserID = async (req: Request<{ userId: number }>, res: Resp
   const { userId } = req.params;
 
   try {
-    const conversations = await ConversationsService.GetAllByUserID(Number(userId));
+    const conversations = await ConversationsService.GetAllByUserID(Number(req.user?.sub), Number(userId));
 
     res.status(200).json(conversations);
   } catch (error) {

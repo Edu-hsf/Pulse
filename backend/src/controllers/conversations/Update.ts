@@ -7,7 +7,7 @@ export const Update = async (req: Request<{ id: number }, object, UpdateConversa
   const data = req.body;
 
   try {
-    await ConversationsService.update(Number(id), data);
+    await ConversationsService.update(Number(req.user?.sub), Number(id), data);
 
     res.status(200).json({ message: 'Conversa alterada com sucesso!' });
   } catch (error) {

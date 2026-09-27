@@ -1,14 +1,12 @@
-import { ConversationsRepository, UsersRepository } from '../../repositories/';
+import { ConversationsRepository } from '../../repositories/';
 
-export async function GetAllByUserID(userId: number) {
+export async function GetAllByUserID(userAuthId: number, userId: number) {
   if (userId <= 0) {
     throw new Error('O campo "UserId" deve ser maior que 0.');
   }
 
-  const user = await UsersRepository.GetByID(userId);
-
-  if (!user || user.deletedAt) {
-    throw new Error('O usuário informado não existe ou está desativado.');
+  if (userAuthId !== userId) {
+    throw new Error('Não é possível obter conversas de outro usuário.');
   }
 
   const conversations = await ConversationsRepository.GetAllByUserID(userId);
