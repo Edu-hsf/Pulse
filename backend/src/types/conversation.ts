@@ -1,12 +1,12 @@
-import { z } from "zod";
-import { messageResponseSchema } from "./message";
+import { z } from 'zod';
+import { messageResponseSchema } from './message';
 
 export const conversationPrivateSettingsSchema = z.object({
   messages: z.object({
     disappearingMessagesEnabled: z.boolean(),
     disappearingMessagesDuration: z.number().nullable(),
   })
-})
+});
 
 export const conversationGroupSettingsSchema = z.object({
   permissions: z.object({
@@ -19,27 +19,27 @@ export const conversationGroupSettingsSchema = z.object({
     disappearingMessagesEnabled: z.boolean(),
     disappearingMessagesDuration: z.number().nullable(),
   })
-})
+});
 
 export const conversationPrivateResponseSchema = z.object({
-    id: z.number(),
-    createdAt: z.coerce.date(),
-    createdBy: z.number(),
-    settings: conversationPrivateSettingsSchema,
-    unreadMessages: z.number(),
-    lastMessage: messageResponseSchema.nullable(),
+  id: z.number(),
+  createdAt: z.coerce.date(),
+  createdBy: z.number(),
+  settings: conversationPrivateSettingsSchema,
+  unreadMessages: z.number(),
+  lastMessage: messageResponseSchema.nullable(),
 });
 
 export const conversationGroupResponseSchema = z.object({
-    id: z.number(),
-    createdAt: z.coerce.date(),
-    createdBy: z.number(),
-    unreadMessages: z.number(),
-    lastMessage: messageResponseSchema.nullable(),
-    name: z.string(),
-    description: z.string().nullable(),
-    avatar: z.url().nullable(),
-    settings: conversationGroupSettingsSchema,
+  id: z.number(),
+  createdAt: z.coerce.date(),
+  createdBy: z.number(),
+  unreadMessages: z.number(),
+  lastMessage: messageResponseSchema.nullable(),
+  name: z.string(),
+  description: z.string().nullable(),
+  avatar: z.url().nullable(),
+  settings: conversationGroupSettingsSchema,
 });
 
 export const conversationResponseSchema = z.union([
@@ -95,7 +95,7 @@ export const updateConversationGroupSchema = z.object({
 export const updateConversationSchema = z.union([
   updateConversationPrivateSchema,
   updateConversationGroupSchema,
-])
+]);
 
 export type ConversationPrivateResponse = z.infer<typeof conversationPrivateResponseSchema>;
 export type ConversationGroupResponse = z.infer<typeof conversationGroupResponseSchema>;

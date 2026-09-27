@@ -1,5 +1,5 @@
-import { type Request, type Response } from "express";
-import { ConversationParticipantsService } from "../../services";
+import { type Request, type Response } from 'express';
+import { ConversationParticipantsService } from '../../services';
 
 export const GetAllByConversationID = async (req: Request<{ conversationId: number }>, res: Response) => {
   const { conversationId } = req.params;
@@ -10,6 +10,6 @@ export const GetAllByConversationID = async (req: Request<{ conversationId: numb
     res.status(200).json(participant);
   } catch (error) {
     console.error(`[${req.method} ${req.originalUrl}]`, error);
-    res.status(500).json({ error: "Erro ao consultar participantes." });
+    res.status(500).json({ error: 'Erro ao consultar participantes.' });
   }
-}
+};

@@ -1,12 +1,12 @@
-import { Router } from "express";
-import { ConversationsController } from '../controllers'
+import { Router } from 'express';
+import { ConversationsController } from '../controllers';
 
 const conversationsRouter = Router();
 
-conversationsRouter.post("/", ConversationsController.Create);
+conversationsRouter.post('/', ConversationsController.Create);
 
-conversationsRouter.patch("/:id", ConversationsController.Update);
+conversationsRouter.patch('/:id', ConversationsController.Update);
 
-conversationsRouter.get('/user/:userId', ConversationsController.GetAllByUserID)
+conversationsRouter.get('/user/:userId', ConversationsController.GetAllByUserID);
 
 export { conversationsRouter };

@@ -1,6 +1,6 @@
 
-import { MessagesRepository } from "../../repositories";
-import { UpdateMessageDTO } from "../../types/message";
+import { MessagesRepository } from '../../repositories';
+import { UpdateMessageDTO } from '../../types/message';
 
 export async function update(authUserId: number, id: number, data: UpdateMessageDTO) {
   if (id <= 0) {
@@ -8,7 +8,7 @@ export async function update(authUserId: number, id: number, data: UpdateMessage
   }
 
   if (Object.keys(data).length === 0) {
-    throw new Error("Nenhum campo informado.");
+    throw new Error('Nenhum campo informado.');
   }
 
   const message = await MessagesRepository.GetMessageByUserIdAndMessageId(authUserId, id);

@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { conversationParticipantResponseSchema } from "./conversationParticipant";
-import { createMessageAttachmentSchema, messageAttachmentResponseSchema } from "./messageAttachment";
+import { z } from 'zod';
+import { conversationParticipantResponseSchema } from './conversationParticipant';
+import { createMessageAttachmentSchema, messageAttachmentResponseSchema } from './messageAttachment';
 
 export const messageResponseSchema = z.object({
   id: z.number(),

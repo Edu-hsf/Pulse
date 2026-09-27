@@ -3,7 +3,7 @@ import * as update from './Update';
 import * as get from './Get';
 
 export const MessagesController = {
-    ...create,
-    ...update,
-    ...get
-}
+  ...create,
+  ...update,
+  ...get
+};

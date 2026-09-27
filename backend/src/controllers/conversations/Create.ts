@@ -1,16 +1,16 @@
-import { type Request, type Response } from "express";
-import { ConversationsService } from "../../services";
-import { CreateConversationDTO } from "../../types/conversation";
+import { type Request, type Response } from 'express';
+import { ConversationsService } from '../../services';
+import { CreateConversationDTO } from '../../types/conversation';
 
-export const Create = async (req: Request<{}, {}, CreateConversationDTO>, res: Response) => {
+export const Create = async (req: Request<object, object, CreateConversationDTO>, res: Response) => {
   const data  = req.body;
 
   try {
     await ConversationsService.Create(Number(req.user?.sub), data);
 
-    res.status(201).json({ message: "Conversa criada com sucesso!" });
+    res.status(201).json({ message: 'Conversa criada com sucesso!' });
   } catch (error) {
     console.error(`[${req.method} ${req.originalUrl}]`, error);
-    res.status(500).json({ error: "Erro ao criar conversa." });
+    res.status(500).json({ error: 'Erro ao criar conversa.' });
   }
-}
+};

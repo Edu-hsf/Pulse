@@ -1,5 +1,5 @@
-import pool from "../../config/database";
-import { CreateUserDTO } from "../../types/user";
+import pool from '../../config/database';
+import { CreateUserDTO } from '../../types/user';
 
 export async function Create(data: CreateUserDTO) {
   return pool.query(

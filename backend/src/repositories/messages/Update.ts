@@ -1,5 +1,5 @@
-import pool from "../../config/database";
-import { UpdateMessageDTO } from "../../types/message";
+import pool from '../../config/database';
+import { UpdateMessageDTO } from '../../types/message';
 
 export async function Update(id: number, data: UpdateMessageDTO) {
   const updates = [];
@@ -10,17 +10,19 @@ export async function Update(id: number, data: UpdateMessageDTO) {
   let index = 1;
 
   if (data.content !== undefined) {
-    updates.push("CONTENT = $" + ++index);
+    index++;
+    updates.push('CONTENT = $' + index);
     values.push(data.content);
   }
 
   if (data.deletedAt !== undefined) {
-    updates.push("DELETED_AT = $" + ++index);
+    index++;
+    updates.push('DELETED_AT = $' + index);
     values.push(data.deletedAt);
   }
 
   return pool.query(
-    `UPDATE MESSAGES SET ${updates.join(", ")} WHERE ID = $1`,
+    `UPDATE MESSAGES SET ${updates.join(', ')} WHERE ID = $1`,
     values,
   );
 }

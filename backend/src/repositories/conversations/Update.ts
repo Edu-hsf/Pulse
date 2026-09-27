@@ -1,5 +1,5 @@
-import pool from "../../config/database";
-import { UpdateConversationDTO } from "../../types/conversation";
+import pool from '../../config/database';
+import { UpdateConversationDTO } from '../../types/conversation';
 
 export async function Update(
   id: number,
@@ -8,7 +8,7 @@ export async function Update(
   const updates: string[] = [];
   const values: unknown[] = [id];
 
-  if ("name" in data) {
+  if ('name' in data) {
     if (data.name !== undefined) {
       updates.push(`name = $${values.length + 1}`);
       values.push(data.name);
@@ -36,7 +36,7 @@ export async function Update(
     return pool.query(
       `
       UPDATE conversation_groups
-      SET ${updates.join(", ")}
+      SET ${updates.join(', ')}
       WHERE id = $1
       `,
       values,
@@ -51,7 +51,7 @@ export async function Update(
   return pool.query(
     `
     UPDATE conversation_privates
-    SET ${updates.join(", ")}
+    SET ${updates.join(', ')}
     WHERE id = $1
     `,
     values,

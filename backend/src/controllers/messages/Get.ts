@@ -1,14 +1,14 @@
-import { type Request, type Response } from "express";
-import { MessagesService } from "../../services";
+import { type Request, type Response } from 'express';
+import { MessagesService } from '../../services';
 
-interface GetMessagesByConversationIDParams {
+export interface GetMessagesByConversationIDParams {
   conversationId: number,
   limit: number,
   cursor?: number,
 }
 
 export const GetMessagesByConversationID = async (req: Request<GetMessagesByConversationIDParams>, res: Response) => {
-  const { conversationId, limit, cursor } = req.params
+  const { conversationId, limit, cursor } = req.params;
 
   try {
     const messages = await MessagesService.GetMessagesByConversationID(Number(req.user?.sub), Number(conversationId), limit, cursor);
@@ -16,6 +16,6 @@ export const GetMessagesByConversationID = async (req: Request<GetMessagesByConv
     res.status(200).json(messages);
   } catch (error) {
     console.error(`[${req.method} ${req.originalUrl}]`, error);
-    res.status(500).json({ error: "Erro ao consultar mensagens." });
+    res.status(500).json({ error: 'Erro ao consultar mensagens.' });
   }
-}
+};

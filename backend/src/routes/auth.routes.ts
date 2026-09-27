@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { AuthController } from '../controllers'
+import { Router } from 'express';
+import { AuthController } from '../controllers';
 
 const authRouter = Router();
 
-authRouter.post("/login", AuthController.LoginWithEmailAndPassword);
-authRouter.post("/signup", AuthController.Signup)
+authRouter.post('/login', AuthController.LoginWithEmailAndPassword);
+authRouter.post('/signup', AuthController.Signup);
 
 export { authRouter };

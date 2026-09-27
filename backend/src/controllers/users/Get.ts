@@ -1,5 +1,5 @@
-import { type Request, type Response } from "express";
-import { UsersService } from "../../services";
+import { type Request, type Response } from 'express';
+import { UsersService } from '../../services';
 
 export const GetByID = async (req: Request<{ id: number }>, res: Response) => {
   const { id } = req.params;
@@ -7,9 +7,9 @@ export const GetByID = async (req: Request<{ id: number }>, res: Response) => {
   try {
     const user = await UsersService.GetByID(id);
     
-    res.status(200).json(user)
+    res.status(200).json(user);
   } catch (error) {
     console.error(`${req.method} ${req.originalUrl}`, error);
-    res.status(500).json({ error: "Erro ao consultar usuário." });
+    res.status(500).json({ error: 'Erro ao consultar usuário.' });
   }
-}
+};

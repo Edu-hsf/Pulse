@@ -1,17 +1,17 @@
-import { z } from "zod";
-import pool from "../../config/database";
-import { ConversationPrivateResponse, conversationResponseSchema } from "../../types/conversation";
+import { z } from 'zod';
+import pool from '../../config/database';
+import { ConversationPrivateResponse, conversationResponseSchema } from '../../types/conversation';
 
 export async function ExistsByID(id: number) {
-    const result = await pool.query('SELECT ID FROM CONVERSATIONS WHERE ID = $1', [id])
+  const result = await pool.query('SELECT ID FROM CONVERSATIONS WHERE ID = $1', [id]);
 
-    const conversation = result.rows[0];
+  const conversation = result.rows[0];
 
-    return conversation ? true : false;
+  return conversation ? true : false;
 }
 
 export async function GetConversationByUserIdAndConversationId(userId: number, conversationId: number) {
-    const result = await pool.query(`
+  const result = await pool.query(`
         SELECT 
             C.ID 
         FROM CONVERSATIONS C 
@@ -19,14 +19,14 @@ export async function GetConversationByUserIdAndConversationId(userId: number, c
             ON CP.conversation_id = C.ID
             AND CP.LEFT_AT IS NOT NULL
         WHERE CP.USER_iD = 36106 AND C.ID = 100
-    `, [userId, conversationId])
+    `, [userId, conversationId]);
 
-    return result.rows[0];
+  return result.rows[0];
 }
 
 export async function GetAllByUserID(userId: number) {
-    const result = await pool.query(
-        `SELECT 
+  const result = await pool.query(
+    `SELECT 
             C.id AS id, 
             C.created_at AS created_at, 
             C.created_by AS created_by, 
@@ -85,60 +85,60 @@ export async function GetAllByUserID(userId: number) {
             ON U.id = MCP.user_id
         LEFT JOIN message_attachments MATT
             ON MATT.message_id = M2.ID`,
-        [userId],
-    );
+    [userId],
+  );
 
-    const conversations = result.rows.map((row: any) => {
-        const isGroup = row.is_group === true || row.is_group === "true";
+  const conversations = result.rows.map((row) => {
+    const isGroup = row.is_group === true || row.is_group === 'true';
 
-        const baseConversation: ConversationPrivateResponse = {
-            id: Number(row.id),
-            createdAt: row.created_at,
-            createdBy: Number(row.created_by),
-            unreadMessages: Number(row.unread_messages ?? 0),
-            settings: isGroup
-                ? row.conversation_groups_settings
-                : row.conversation_privates_settings,
-            lastMessage: row.message_id ? {
-                id: Number(row.message_id),
-                participant: {
-                    id: Number(row.created_by),
-                    user: {
-                        id: Number(row.user_id),
-                        name: row.user_name,
-                        email: row.user_email,
-                        avatar: row.user_avatar,
-                        createdAt: row.user_created_at,
-                        deletedAt: row.user_deleted_at,
-                    },
-                    role: row.participant_role,
-                    joinedAt: new Date(row.participant_joined_at),
-                    leftAt: row.participant_left_at,
-                    addBy: row.participant_add_by ? Number(row.participant_add_by) : null,
-                    removedBy: row.participant_removed_by ? Number(row.participant_removed_by) : null,
-                },
-                content: row.message_content,
-                createdAt: row.message_created_at,
-                deletedAt: row.message_deleted_at ? new Date(row.message_deleted_at) : null,
-                attachment: row.attachment_id ? {
-                    id: Number(row.attachment_id),
-                    type: row.attachment_type,
-                    url: row.attachment_url,
-                } : null,      
-            } : null,
-        }
+    const baseConversation: ConversationPrivateResponse = {
+      id: Number(row.id),
+      createdAt: row.created_at,
+      createdBy: Number(row.created_by),
+      unreadMessages: Number(row.unread_messages ?? 0),
+      settings: isGroup
+        ? row.conversation_groups_settings
+        : row.conversation_privates_settings,
+      lastMessage: row.message_id ? {
+        id: Number(row.message_id),
+        participant: {
+          id: Number(row.created_by),
+          user: {
+            id: Number(row.user_id),
+            name: row.user_name,
+            email: row.user_email,
+            avatar: row.user_avatar,
+            createdAt: row.user_created_at,
+            deletedAt: row.user_deleted_at,
+          },
+          role: row.participant_role,
+          joinedAt: new Date(row.participant_joined_at),
+          leftAt: row.participant_left_at,
+          addBy: row.participant_add_by ? Number(row.participant_add_by) : null,
+          removedBy: row.participant_removed_by ? Number(row.participant_removed_by) : null,
+        },
+        content: row.message_content,
+        createdAt: row.message_created_at,
+        deletedAt: row.message_deleted_at ? new Date(row.message_deleted_at) : null,
+        attachment: row.attachment_id ? {
+          id: Number(row.attachment_id),
+          type: row.attachment_type,
+          url: row.attachment_url,
+        } : null,      
+      } : null,
+    };
 
-        if (isGroup) {
-            return {
-            ...baseConversation,
-            name: row.conversation_groups_name,
-            description: row.conversation_groups_description,
-            avatar: row.conversation_groups_avatar,
-            };
-        }
+    if (isGroup) {
+      return {
+        ...baseConversation,
+        name: row.conversation_groups_name,
+        description: row.conversation_groups_description,
+        avatar: row.conversation_groups_avatar,
+      };
+    }
 
-        return baseConversation;
-    });
+    return baseConversation;
+  });
 
-    return z.array(conversationResponseSchema).parse(conversations);
+  return z.array(conversationResponseSchema).parse(conversations);
 }

@@ -1,16 +1,16 @@
-import pool from "../../config/database";
-import { MessageResponse, messageResponseSchema } from "../../types/message";
+import pool from '../../config/database';
+import { MessageResponse, messageResponseSchema } from '../../types/message';
 
 export async function ExistsByID(id: number) {
-    const result = await pool.query('SELECT ID FROM MESSAGES WHERE ID = $1', [id]);
+  const result = await pool.query('SELECT ID FROM MESSAGES WHERE ID = $1', [id]);
 
-    const message = result.rows[0]
+  const message = result.rows[0];
 
-    return message ? true : false
+  return message ? true : false;
 }
 
 export async function GetMessageByUserIdAndMessageId(userId: number, messageId: number) {
-    const result = await pool.query(`
+  const result = await pool.query(`
         SELECT 
             M.ID 
             M.DELETED_AT AS "deletedAt"
@@ -20,12 +20,12 @@ export async function GetMessageByUserIdAndMessageId(userId: number, messageId: 
             AND CP.LEFT_AT IS NOT NULL
         WHERE CP.USER_ID = $1 AND M.ID = $2`, [userId, messageId]);
 
-    return result.rows[0];
+  return result.rows[0];
 }
 
 export async function GetMessagesByConversationID (conversationId: number, limit: number, cursor?: number) {
-    const result = cursor ? 
-        await pool.query(`
+  const result = cursor ? 
+    await pool.query(`
             SELECT
                 M.ID AS id,
                     CP.ID AS participant_id,
@@ -59,7 +59,7 @@ export async function GetMessagesByConversationID (conversationId: number, limit
             WHERE M.CONVERSATION_ID = $1 AND M.ID < $3
             ORDER BY M.ID DESC
             LIMIT $2`, [conversationId, limit, cursor])
-        : await pool.query(`
+    : await pool.query(`
             SELECT
                 M.ID AS id,
                     CP.ID AS participant_id,
@@ -89,39 +89,39 @@ export async function GetMessagesByConversationID (conversationId: number, limit
                 ON ATT.MESSAGE_ID = M.ID
             WHERE M.CONVERSATION_ID = $1
             ORDER BY M.ID DESC
-            LIMIT $2`, [conversationId, limit])
+            LIMIT $2`, [conversationId, limit]);
 
-    const messages = result.rows.map((row: any) => {
-        const message: MessageResponse = {
-            id: Number(row.id),
-            participant: {
-                id: Number(row.created_by),
-                user: {
-                    id: Number(row.user_id),
-                    name: row.user_name,
-                    email: row.user_email,
-                    avatar: row.user_avatar,
-                    createdAt: row.user_created_at,
-                    deletedAt: row.user_deleted_at,
-                },
-                role: row.participant_role,
-                joinedAt: row.participant_joined_at,
-                leftAt: row.participant_left_at,
-                addBy: row.participant_add_by,
-                removedBy: row.participant_removed_at,
-            },
-            content: row.content,
-            createdAt: row.created_by,
-            deletedAt: row.deleted_at,
-            attachment: row.attachment_id ? {
-                id: Number(row.attachment_id),
-                type: row.attachment_type,
-                url: row.attachment_url,
-            } : null,
-        }
+  const messages = result.rows.map((row) => {
+    const message: MessageResponse = {
+      id: Number(row.id),
+      participant: {
+        id: Number(row.created_by),
+        user: {
+          id: Number(row.user_id),
+          name: row.user_name,
+          email: row.user_email,
+          avatar: row.user_avatar,
+          createdAt: row.user_created_at,
+          deletedAt: row.user_deleted_at,
+        },
+        role: row.participant_role,
+        joinedAt: row.participant_joined_at,
+        leftAt: row.participant_left_at,
+        addBy: row.participant_add_by,
+        removedBy: row.participant_removed_at,
+      },
+      content: row.content,
+      createdAt: row.created_by,
+      deletedAt: row.deleted_at,
+      attachment: row.attachment_id ? {
+        id: Number(row.attachment_id),
+        type: row.attachment_type,
+        url: row.attachment_url,
+      } : null,
+    };
 
-        return message;
-    });
+    return message;
+  });
     
-    return messageResponseSchema.array().parse(messages);
+  return messageResponseSchema.array().parse(messages);
 }
