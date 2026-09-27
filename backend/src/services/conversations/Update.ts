@@ -1,0 +1,20 @@
+import { ConversationsRepository } from '../../repositories';
+import { UpdateConversationDTO } from '../../types/conversation';
+
+export async function update(id: number, data: UpdateConversationDTO) {
+  if (id <= 0) {
+    throw new Error('O campo "ID" deve ser maior que 0.');
+  }
+
+  if (Object.keys(data).length === 0) {
+    throw new Error('Nenhum campo informado.');
+  }
+
+  const conversation = await ConversationsRepository.ExistsByID(id);
+
+  if (!conversation) {
+    throw new Error('Conversa não encontrada.');
+  }
+
+  await ConversationsRepository.Update(id, data);
+}
