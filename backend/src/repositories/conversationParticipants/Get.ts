@@ -3,21 +3,34 @@ import pool from '../../config/database';
 import { conversationParticipantResponseSchema } from '../../types/conversationParticipant';
 
 export async function GetByID(id: number) {
-  const result = await pool.query(`
+    const result = await pool.query(`
             SELECT
-                CP.CONVERSATION_ID AS "conversationId", CP.USER_ID AS "userId", U.DELETED_AT AS "deletedAt" 
+                CP.CONVERSATION_ID AS "conversationId", 
+                CP.USER_ID AS "userId", 
+                U.DELETED_AT AS "deletedAt" 
             FROM CONVERSATION_PARTICIPANTS CP
             INNER JOIN USERS U
                 ON U.ID = CP.USER_ID
             WHERE CP.ID = $1
         `, [id]);
 
-  return result.rows[0];
+    return result.rows[0];
+}
+
+export async function ExistsByUserIDAndConversationID(userId: number, conversationId: number) {
+    const result = await pool.query(`
+        SELECT
+            CP.ID AS "id"
+        FROM CONVERSATION_PARTICIPANTS CP
+        WHERE CP.USER_ID = $1 AND CP.CONVERSATION_ID = $2
+    `, [userId, conversationId]);
+
+    return result.rows[0] ? true : false;
 }
 
 export async function GetAllByConversationID(conversationId: number) {
-  const result = await pool.query(
-    `SELECT 
+    const result = await pool.query(`
+        SELECT 
             MP.ID AS id,
                 U.ID AS user_id,
                 U.NAME AS user_name,
@@ -33,11 +46,11 @@ export async function GetAllByConversationID(conversationId: number) {
         FROM conversation_participants MP
         INNER JOIN conversations C
             ON C.ID = MP.conversation_id
-        WHERE CP.conversation_id = $1`,
-    [conversationId],
-  );
+        WHERE CP.conversation_id = $1
+    `, [conversationId],
+    );
+  
+    const participants = result.rows;
 
-  const participants = result.rows;
-
-  return z.array(conversationParticipantResponseSchema).parse(participants);
+    return z.array(conversationParticipantResponseSchema).parse(participants);
 }

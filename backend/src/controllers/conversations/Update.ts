@@ -3,15 +3,15 @@ import { ConversationsService } from '../../services';
 import { UpdateConversationDTO } from '../../types/conversation';
 
 export const Update = async (req: Request<{ id: number }, object, UpdateConversationDTO>, res: Response) => {
-  const { id } = req.params;
-  const data = req.body;
+    const { id } = req.params;
+    const data = req.body;
 
-  try {
-    await ConversationsService.update(Number(req.user?.sub), Number(id), data);
+    try {
+        await ConversationsService.update(Number(req.user?.sub), Number(id), data);
 
-    res.status(200).json({ message: 'Conversa alterada com sucesso!' });
-  } catch (error) {
-    console.error(`[${req.method} ${req.originalUrl}]`, error);
-    res.status(500).json({ error: 'Erro ao alterar Conversa.' });
-  }
+        res.status(200).json({ message: 'Conversa alterada com sucesso!' });
+    } catch (error) {
+        console.error(`[${req.method} ${req.originalUrl}]`, error);
+        res.status(500).json({ error: 'Erro ao alterar Conversa.' });
+    }
 };

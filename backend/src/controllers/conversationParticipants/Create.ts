@@ -3,14 +3,14 @@ import { CreateConversationParticipantDTO } from '../../types/conversationPartic
 import { ConversationParticipantsService } from '../../services';
 
 export const Create = async (req: Request<object, object, CreateConversationParticipantDTO>, res: Response) => {
-  const data  = req.body;
+    const data  = req.body;
 
-  try {
-    await ConversationParticipantsService.Create(data);
+    try {
+        await ConversationParticipantsService.Create(data);
 
-    res.status(201).json({ message: 'Participante criado com sucesso!' });
-  } catch (error) {
-    console.error(`[${req.method} ${req.originalUrl}]`, error);
-    res.status(500).json({ error: 'Erro ao criar participante.' });
-  }
+        res.status(201).json({ message: 'Participante criado com sucesso!' });
+    } catch (error) {
+        console.error(`[${req.method} ${req.originalUrl}]`, error);
+        res.status(500).json({ error: 'Erro ao criar participante.' });
+    }
 };

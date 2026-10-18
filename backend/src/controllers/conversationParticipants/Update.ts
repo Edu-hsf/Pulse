@@ -3,15 +3,15 @@ import { UpdateConversationParticipantDTO } from '../../types/conversationPartic
 import { ConversationParticipantsService } from '../../services';
 
 export const Update = async (req: Request<{ id: number }, object, UpdateConversationParticipantDTO>, res: Response) => {
-  const { id } = req.params;
-  const data = req.body;
+    const { id } = req.params;
+    const data = req.body;
 
-  try {
-    await ConversationParticipantsService.update(Number(id), data);
+    try {
+        await ConversationParticipantsService.update(Number(id), data);
 
-    res.status(200).json({ message: 'Participante alterado com sucesso!' });
-  } catch (error) {
-    console.error(`[${req.method} ${req.originalUrl}]`, error);
-    res.status(500).json({ error: 'Erro ao alterar participante.' });
-  }
+        res.status(200).json({ message: 'Participante alterado com sucesso!' });
+    } catch (error) {
+        console.error(`[${req.method} ${req.originalUrl}]`, error);
+        res.status(500).json({ error: 'Erro ao alterar participante.' });
+    }
 };

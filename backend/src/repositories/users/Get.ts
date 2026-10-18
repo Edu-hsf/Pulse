@@ -2,7 +2,7 @@ import pool from '../../config/database';
 import { userResponseSchema, userWithPasswordSchema } from '../../types/user';
 
 export async function GetByID(id: number) {
-  const result = await pool.query(`
+    const result = await pool.query(`
         SELECT 
             ID AS id, 
             NAME AS name, 
@@ -13,13 +13,13 @@ export async function GetByID(id: number) {
         FROM USERS 
         WHERE ID = $1`,  [id]);
 
-  const user = result.rows[0];
+    const user = result.rows[0];
 
-  return user ? userResponseSchema.parse(user) : null;
+    return user ? userResponseSchema.parse(user) : null;
 }
 
 export async function GetByEmail(email: string) {
-  const result = await pool.query(`
+    const result = await pool.query(`
         SELECT 
             ID AS id,
             NAME AS name,
@@ -31,7 +31,7 @@ export async function GetByEmail(email: string) {
         LIMIT 1
     `, [email]);
 
-  const user = result.rows[0];
+    const user = result.rows[0];
 
-  return user ? userWithPasswordSchema.parse(user) : null;
+    return user ? userWithPasswordSchema.parse(user) : null;
 }
