@@ -1,12 +1,11 @@
 import { Router } from 'express';
 import { ConversationParticipantsController } from '../controllers';
 
-const conversationParticipantsRouter = Router();
+const conversationParticipantsRouter = Router({ mergeParams: true });
 
-conversationParticipantsRouter.post('/', ConversationParticipantsController.Create);
+conversationParticipantsRouter.post('/', ConversationParticipantsController.AddParticipant);
 
-conversationParticipantsRouter.patch('/:id', ConversationParticipantsController.Update);
-
-conversationParticipantsRouter.get('/conversation/:conversationId', ConversationParticipantsController.GetAllByConversationID);
+conversationParticipantsRouter.patch('/:participantId', ConversationParticipantsController.Update);
+conversationParticipantsRouter.get('/', ConversationParticipantsController.GetAllByConversationID);
 
 export { conversationParticipantsRouter };

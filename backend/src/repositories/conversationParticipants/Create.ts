@@ -1,7 +1,7 @@
 import pool from '../../config/database';
-import { CreateConversationParticipantDTO } from '../../types/conversationParticipant';
+import { CreateConversationParticipantRecord } from '../../types/conversationParticipant';
 
-export async function Create (data: CreateConversationParticipantDTO) {
+export async function Create (data: CreateConversationParticipantRecord) {
     return await pool.query(`
         INSERT INTO CONVERSATION_PARTICIPANTS
             (USER_ID, CONVERSATION_ID, ADD_BY, ROLE)

@@ -5,9 +5,12 @@ export const GetAllByConversationID = async (req: Request<{ conversationId: numb
     const { conversationId } = req.params;
 
     try {
-        const participant = await ConversationParticipantsService.GetAllByConversationID(Number(conversationId));
+        const participants = await ConversationParticipantsService.GetAllByConversationID(
+            Number(req.user?.sub),
+            conversationId,
+        );
 
-        res.status(200).json(participant);
+        res.status(200).json(participants);
     } catch (error) {
         console.error(`[${req.method} ${req.originalUrl}]`, error);
         res.status(500).json({ error: 'Erro ao consultar participantes.' });

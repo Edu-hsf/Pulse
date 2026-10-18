@@ -2,12 +2,17 @@ import { type Request, type Response } from 'express';
 import { UpdateConversationParticipantDTO } from '../../types/conversationParticipant';
 import { ConversationParticipantsService } from '../../services';
 
-export const Update = async (req: Request<{ id: number }, object, UpdateConversationParticipantDTO>, res: Response) => {
-    const { id } = req.params;
+export const Update = async (req: Request<{ conversationId: number; participantId: number }, object, UpdateConversationParticipantDTO>, res: Response) => {
+    const { conversationId, participantId } = req.params;
     const data = req.body;
 
     try {
-        await ConversationParticipantsService.update(Number(id), data);
+        await ConversationParticipantsService.update(
+            Number(req.user?.sub),
+            conversationId,
+            participantId,
+            data,
+        );
 
         res.status(200).json({ message: 'Participante alterado com sucesso!' });
     } catch (error) {

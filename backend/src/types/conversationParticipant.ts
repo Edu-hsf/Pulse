@@ -13,8 +13,6 @@ export const conversationParticipantResponseSchema = z.object({
 
 export const createConversationParticipantSchema = z.object({
     userId: z.number('O campo "userId" deve ser um número.').positive('O campo "userId" deve ser maior que 0'),
-    conversationId: z.number('O campo "conversationId" deve ser um número.').positive('O campo "conversationId" deve ser maior que 0'),
-    addBy: z.number('O campo "conversationId" deve ser um número.').positive('O campo "conversationId" deve ser maior que 0').optional(),
 }).strict();
 
 export const updateConversationParticipantSchema = z.object({
@@ -26,4 +24,9 @@ export const updateConversationParticipantSchema = z.object({
 
 export type ConversationParticipantResponse = z.infer<typeof conversationParticipantResponseSchema>;
 export type CreateConversationParticipantDTO = z.infer<typeof createConversationParticipantSchema>;
+export type CreateConversationParticipantRecord = {
+    userId: number;
+    conversationId: number;
+    addBy: number | null;
+};
 export type UpdateConversationParticipantDTO = z.infer<typeof updateConversationParticipantSchema>;

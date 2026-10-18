@@ -3,23 +3,23 @@ import {
     ConversationsRepository,
     UsersRepository,
 } from '../../repositories';
-import { CreateConversationParticipantDTO } from '../../types/conversationParticipant';
+import { CreateConversationParticipantRecord } from '../../types/conversationParticipant';
 
-export async function Add(userAuthId: number, data: CreateConversationParticipantDTO) {
-    if (!data.addBy) {
-        throw new Error('O campo "addBy" é obrigatório para adicionar participantes a uma conversa.');
+export async function AddParticipant(userAuthId: number, conversationId: number, userId: number) {
+    if (!Number.isInteger(conversationId) || conversationId <= 0 || !Number.isInteger(userId) || userId <= 0) {
+        throw new Error('Os identificadores da conversa e do usuário devem ser maiores que 0.');
     }
 
-    const user = await UsersRepository.GetByID(data.userId);
+    const user = await UsersRepository.GetByID(userId);
 
     if (!user || user.deletedAt) {
         throw new Error('O usuário informado não existe ou está desativado.');
     }
 
-    const conversation = await ConversationsRepository.GetConversationByUserIdAndID(userAuthId, data.conversationId);
+    const conversation = await ConversationsRepository.GetConversationByUserIdAndID(userAuthId, conversationId);
 
     if (!conversation) {
-        throw new Error('Não é possível adicionar participantes a uma conversa que não lhe pertence.');
+        throw new Error('Não é possível adicionar participantes a uma conversa da qual você não participa.');
     }
 
     if (conversation?.settings && 'permissions' in conversation.settings) {
@@ -32,10 +32,22 @@ export async function Add(userAuthId: number, data: CreateConversationParticipan
         throw new Error('Essa não é uma conversa de grupo.');
     }
 
+    const alreadyParticipant = await ConversationParticipantsRepository.ExistsByUserIDAndConversationID(userId, conversationId);
+
+    if (alreadyParticipant) {
+        throw new Error('O usuário já é participante desta conversa.');
+    }
+
+    const data: CreateConversationParticipantRecord = {
+        userId,
+        conversationId,
+        addBy: userAuthId,
+    };
+
     await ConversationParticipantsRepository.Create(data);
 }
 
-export async function Join(userAuthId: number, groupLink: string) {
+export async function JoinGroup(userAuthId: number, groupLink: string) {
     const user = await UsersRepository.GetByID(userAuthId);
 
     if (!user || user.deletedAt) {
@@ -54,10 +66,10 @@ export async function Join(userAuthId: number, groupLink: string) {
         throw new Error('O usuário já é participante desta conversa.');
     }
 
-    const data: CreateConversationParticipantDTO = {
+    const data: CreateConversationParticipantRecord = {
         userId: userAuthId,
         conversationId: conversation.id,
-        addBy: undefined, // Como o usuário está se juntando por conta própria, não há um "addBy" específico
+        addBy: null,
     };
 
     await ConversationParticipantsRepository.Create(data);

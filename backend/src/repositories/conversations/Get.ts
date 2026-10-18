@@ -36,7 +36,7 @@ export async function GetConversationByUserIdAndID(userId: number, id: number): 
         SELECT 
           C.ID AS id,
           CP.ROLE as role,
-          CG.GROUP_LINK AS groupLink,
+          CG.GROUP_LINK AS grouplink,
           CASE
             WHEN CPR.SETTINGS IS NOT NULL THEN CPR.SETTINGS
             ELSE CG.SETTINGS
@@ -44,12 +44,12 @@ export async function GetConversationByUserIdAndID(userId: number, id: number): 
         FROM CONVERSATIONS C 
         INNER JOIN CONVERSATION_PARTICIPANTS CP
           ON CP.conversation_id = C.ID
-          AND CP.LEFT_AT IS NOT NULL
+          AND CP.LEFT_AT IS NULL
         LEFT JOIN CONVERSATION_PRIVATES CPR
-          ON CPR.ID = C.ID
+          ON CPR.CONVERSATION_ID = C.ID
         LEFT JOIN CONVERSATION_GROUPS CG
-          ON CG.ID = C.ID
-        WHERE CP.USER_iD = $1 AND C.ID = $2
+          ON CG.CONVERSATION_ID = C.ID
+        WHERE CP.USER_ID = $1 AND C.ID = $2
     `, [userId, id]);
 
     return addConversationSchema.optional().parse(result.rows[0]);

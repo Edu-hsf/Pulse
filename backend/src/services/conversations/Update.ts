@@ -10,7 +10,7 @@ export async function update(userAuthId: number, id: number, data: UpdateConvers
         throw new Error('Nenhum campo informado.');
     }
 
-    const conversation = await ConversationsRepository.GetConversationByUserIdAndConversationId(userAuthId, id);
+    const conversation = await ConversationsRepository.GetConversationByUserIdAndID(userAuthId, id);
 
     if (!conversation) {
         throw new Error('Não é possível alterar uma conversa que não pertence ao usuário.');

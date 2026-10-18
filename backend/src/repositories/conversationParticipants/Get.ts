@@ -7,7 +7,8 @@ export async function GetByID(id: number) {
             SELECT
                 CP.CONVERSATION_ID AS "conversationId", 
                 CP.USER_ID AS "userId", 
-                U.DELETED_AT AS "deletedAt" 
+                U.DELETED_AT AS "deletedAt",
+                CP.LEFT_AT AS "leftAt"
             FROM CONVERSATION_PARTICIPANTS CP
             INNER JOIN USERS U
                 ON U.ID = CP.USER_ID
@@ -31,26 +32,43 @@ export async function ExistsByUserIDAndConversationID(userId: number, conversati
 export async function GetAllByConversationID(conversationId: number) {
     const result = await pool.query(`
         SELECT 
-            MP.ID AS id,
-                U.ID AS user_id,
-                U.NAME AS user_name,
-                U.EMAIL AS user_email,
-                U.AVATAR AS user_avatar,
-                U.CREATED_AT AS user_created_at,
-                U.DELETED_AT AS user_deleted_at,
-            MP.JOINED_AT AS joined_at,
-            MP.LEFT_AT AS left_at,
-            MP.ADD_BY AS add_by,
-            MP.REMOVED_BY AS removed_at,
-            MP.ROLE AS participant_role,
-        FROM conversation_participants MP
+            CP.ID AS id,
+            U.ID AS user_id,
+            U.NAME AS user_name,
+            U.EMAIL AS user_email,
+            U.AVATAR AS user_avatar,
+            U.CREATED_AT AS user_created_at,
+            U.DELETED_AT AS user_deleted_at,
+            CP.JOINED_AT AS joined_at,
+            CP.LEFT_AT AS left_at,
+            CP.ADD_BY AS add_by,
+            CP.REMOVED_BY AS removed_by,
+            CP.ROLE AS participant_role
+        FROM conversation_participants CP
         INNER JOIN conversations C
-            ON C.ID = MP.conversation_id
-        WHERE CP.conversation_id = $1
+            ON C.ID = CP.CONVERSATION_ID
+        INNER JOIN users U
+            ON U.ID = CP.USER_ID
+        WHERE CP.CONVERSATION_ID = $1
     `, [conversationId],
     );
   
-    const participants = result.rows;
+    const participants = result.rows.map((row) => ({
+        id: Number(row.id),
+        user: {
+            id: Number(row.user_id),
+            name: row.user_name,
+            email: row.user_email,
+            avatar: row.user_avatar,
+            createdAt: row.user_created_at,
+            deletedAt: row.user_deleted_at,
+        },
+        joinedAt: row.joined_at,
+        leftAt: row.left_at,
+        addBy: row.add_by === null ? null : Number(row.add_by),
+        removedBy: row.removed_by === null ? null : Number(row.removed_by),
+        role: row.participant_role,
+    }));
 
     return z.array(conversationParticipantResponseSchema).parse(participants);
 }
